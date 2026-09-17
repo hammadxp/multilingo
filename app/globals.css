@@ -6,6 +6,50 @@
 
 @theme inline {
   --font-sans: var(--font-sans);
+  --color-ink: var(--ink);
+  --color-muted-ink: var(--muted-ink);
+  --color-line: var(--line);
+  --color-canvas: var(--canvas);
+  --color-paper: var(--paper);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-teal-soft: var(--teal-soft);
+  --color-hover: var(--hover);
+  --color-peach: var(--peach);
+  --animate-dot-pulse: dot-pulse 1.05s ease-in-out infinite;
+  --animate-quick-spin: spin 0.8s linear infinite;
+}
+
+:root {
+  --ink: #1c2948;
+  --muted-ink: #65718b;
+  --line: #dce2ec;
+  --canvas: #f7f8fc;
+  --paper: #fff;
+  --primary: oklch(68.5% 0.169 237.323);
+  --primary-hover: oklch(61% 0.16 237.323);
+  --teal-soft: oklch(93% 0.05 237.323);
+  --hover: oklch(95% 0.035 237.323);
+  --peach: oklch(78% 0.12 92);
+  --popover: var(--paper);
+  --popover-foreground: var(--ink);
+  --accent: var(--hover);
+  --accent-foreground: var(--ink);
+  --foreground: var(--ink);
+  color-scheme: light;
+}
+.dark {
+  --ink: #f2f4ff;
+  --muted-ink: #b8c3d9;
+  --line: #444;
+  --canvas: #000;
+  --paper: #2a2a2a;
+  --primary: oklch(68.5% 0.169 237.323);
+  --primary-hover: oklch(78% 0.14 237.323);
+  --teal-soft: oklch(34% 0.07 237.323);
+  --hover: oklch(30% 0.05 237.323);
+  --popover: #303030;
+  color-scheme: dark;
 }
 
 * {

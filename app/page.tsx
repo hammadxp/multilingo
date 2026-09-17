@@ -263,16 +263,27 @@ const languageRegions: Record<string, string> = {
   zu: "ZA",
 }
 function flagForLocale(locale: string) {
-  const region = languageRegions[locale] ?? new Intl.Locale(locale).maximize().region
+  const region =
+    languageRegions[locale] ?? new Intl.Locale(locale).maximize().region
   return /^[a-z]{2}$/i.test(region ?? "") ? region.toLowerCase() : "un"
 }
 function LanguageFlag({ locale }: { locale: string }) {
   if (locale === "auto") {
-    return <span className="language-flag language-flag-auto" aria-hidden="true"><Globe2 size={16} /></span>
+    return (
+      <span
+        className="grid h-[18px] w-6 flex-none place-items-center overflow-hidden rounded-[2px] leading-none text-muted-ink shadow-[0_0_0_1px_rgba(28,41,72,0.12)] shadow-none [&_img]:block [&_img]:size-full [&_img]:object-cover"
+        aria-hidden="true"
+      >
+        <Globe2 size={16} />
+      </span>
+    )
   }
 
   return (
-    <span className="language-flag" aria-hidden="true">
+    <span
+      className="grid h-[18px] w-6 flex-none place-items-center overflow-hidden rounded-[2px] leading-none shadow-[0_0_0_1px_rgba(28,41,72,0.12)] [&_img]:block [&_img]:size-full [&_img]:object-cover"
+      aria-hidden="true"
+    >
       <Image
         src={`https://flagcdn.com/${flagForLocale(locale)}.svg`}
         width={24}
@@ -645,10 +656,14 @@ export default function Page() {
   }
 
   return (
-    <main className="app-shell">
+    <main className="min-h-screen bg-canvas text-ink">
       <SiteHeader>
-        <div className="nav-right">
-          <button className="donate-button nav-desktop-action" type="button" aria-label="Donate to Multilingo">
+        <div className="flex items-center gap-[9px] max-[600px]:gap-0.5">
+          <button
+            className="inline-flex h-[38px] items-center justify-center gap-[7px] rounded-[10px] px-[11px] text-[13px] font-[650] whitespace-nowrap text-ink hover:bg-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary max-[768px]:hidden"
+            type="button"
+            aria-label="Donate to Multilingo"
+          >
             <Heart size={16} /> Donate
           </button>
           <HistoryMenu
@@ -668,7 +683,7 @@ export default function Page() {
             }
           />
           <button
-            className="theme-toggle"
+            className="inline-flex size-[38px] items-center justify-center gap-[7px] rounded-[10px] border border-line text-[13px] font-[650] text-ink hover:bg-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary max-[768px]:hidden"
             onClick={() =>
               setTheme(resolvedTheme === "dark" ? "light" : "dark")
             }
@@ -688,33 +703,67 @@ export default function Page() {
           {process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY ? (
             <AuthControls />
           ) : (
-            <button className="auth-button">Sign in</button>
+            <button className="inline-flex h-[38px] items-center justify-center gap-[7px] rounded-[10px] border border-line bg-paper px-[14px] text-[13px] font-[650] whitespace-nowrap text-ink hover:bg-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary max-[600px]:h-[34px] max-[600px]:px-2 max-[600px]:text-xs">
+              Sign in
+            </button>
           )}
           <DropdownMenu>
-            <DropdownMenuTrigger className="nav-mobile-menu" aria-label="Open navigation menu">
+            <DropdownMenuTrigger
+              className="hidden size-[38px] items-center justify-center rounded-[9px] border border-line bg-paper p-0 text-ink max-[768px]:inline-flex"
+              aria-label="Open navigation menu"
+            >
               <Menu size={19} />
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="nav-menu mobile-nav-menu" align="end">
-              <DropdownMenuItem className="mobile-nav-item" onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}>
-                {themeReady && resolvedTheme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
-                {themeReady && resolvedTheme === "dark" ? "Light mode" : "Dark mode"}
+            <DropdownMenuContent
+              className="!max-h-[470px] !w-[170px] !w-[min(370px,calc(100vw-24px))] overflow-hidden !rounded-[13px] !border !border-line !bg-[var(--popover)] !text-ink !shadow-[0_15px_34px_rgba(18,28,59,0.18)] [&_[data-slot=dropdown-menu-item]]:cursor-pointer [&_[data-slot=dropdown-menu-item]]:transition-colors [&_[data-slot=dropdown-menu-item]:not([data-disabled]):hover]:bg-hover [&_[data-slot=dropdown-menu-item]:not([data-disabled]):hover]:text-primary [&_[data-slot=dropdown-menu-label]]:font-[650]"
+              align="end"
+            >
+              <DropdownMenuItem
+                className="cursor-pointer !gap-[9px] [&>span]:ml-auto"
+                onClick={() =>
+                  setTheme(resolvedTheme === "dark" ? "light" : "dark")
+                }
+              >
+                {themeReady && resolvedTheme === "dark" ? (
+                  <Sun size={16} />
+                ) : (
+                  <Moon size={16} />
+                )}
+                {themeReady && resolvedTheme === "dark"
+                  ? "Light mode"
+                  : "Dark mode"}
               </DropdownMenuItem>
-              <DropdownMenuItem className="mobile-nav-item" render={<Link href="/saved" />}>
-                <Star size={16} /> Saved <span className="nav-count">{saved.length}</span>
+              <DropdownMenuItem
+                className="cursor-pointer !gap-[9px] [&>span]:ml-auto"
+                render={<Link href="/saved" />}
+              >
+                <Star size={16} /> Saved{" "}
+                <span className="grid h-[21px] min-w-[21px] place-items-center rounded-[7px] bg-hover px-[5px] text-[11px] font-[750] text-primary max-[600px]:text-[10px] max-[360px]:hidden">
+                  {saved.length}
+                </span>
               </DropdownMenuItem>
-              <DropdownMenuItem className="mobile-nav-item" render={<Link href="/history" />}>
-                <Clock3 size={16} /> History <span className="nav-count">{history.length}</span>
+              <DropdownMenuItem
+                className="cursor-pointer !gap-[9px] [&>span]:ml-auto"
+                render={<Link href="/history" />}
+              >
+                <Clock3 size={16} /> History{" "}
+                <span className="grid h-[21px] min-w-[21px] place-items-center rounded-[7px] bg-hover px-[5px] text-[11px] font-[750] text-primary max-[600px]:text-[10px] max-[360px]:hidden">
+                  {history.length}
+                </span>
               </DropdownMenuItem>
-              <DropdownMenuItem className="mobile-nav-item">
+              <DropdownMenuItem className="cursor-pointer !gap-[9px] [&>span]:ml-auto">
                 <Heart size={16} /> Donate
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
       </SiteHeader>
-      <section id="workspace" className="workspace">
-        <section className="source-pane" aria-label="Original text">
-          <div className="pane-heading">
+      <section
+        id="workspace"
+        className="mx-auto grid min-h-[calc(100vh-74px)] w-[min(1320px,calc(100%-48px))] grid-cols-2 items-stretch gap-3 py-6 pb-8 max-[900px]:flex max-[900px]:w-[min(680px,calc(100%-28px))] max-[900px]:flex-col max-[900px]:pt-[14px] max-[600px]:w-[calc(100%-20px)] max-[600px]:gap-[10px] max-[600px]:pt-[10px]"
+      >
+        <section className="min-w-0" aria-label="Original text">
+          <div className="mb-3 flex min-h-[39px] items-center justify-between gap-3 text-[13px] font-bold text-muted-ink [&>span]:pl-[11px]">
             <span>Translate from</span>
             <LanguagePicker
               items={[autoLanguage, ...languages]}
@@ -723,24 +772,27 @@ export default function Page() {
                 void translate(selectedLanguages, language)
               }}
             >
-              <button className="source-language" aria-label="Source language">
+              <button
+                className="inline-flex items-center gap-1.5 rounded-[9px] border border-line bg-paper px-[11px] py-2 text-xs font-bold whitespace-nowrap text-ink hover:border-primary hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                aria-label="Source language"
+              >
                 {sourceLanguage.name} <ChevronDown size={15} />
               </button>
             </LanguagePicker>
           </div>
           <div
-            className={`source-editor ${keyboardFocus ? "keyboard-focus" : ""}`}
+            className={`flex min-h-[316px] flex-col rounded-2xl border border-line bg-paper px-[22px] pt-[22px] pb-[18px] transition-[border-color,box-shadow] duration-150 max-[900px]:min-h-[240px] max-[600px]:px-[17px] max-[600px]:pt-[17px] max-[600px]:pb-[10px] ${keyboardFocus ? "focus-within:border-primary focus-within:shadow-[0_0_0_3px_color-mix(in_srgb,var(--primary)_16%,transparent)]" : ""}`}
           >
             <textarea
               ref={textareaRef}
               aria-label="Text to translate"
-              className={
+              className={`h-[240px] min-h-[240px] w-full flex-none resize-none overflow-hidden border-0 bg-transparent leading-normal font-medium tracking-[-0.035em] text-ink outline-none placeholder:text-muted-ink max-[900px]:h-[167px] max-[900px]:min-h-[167px] ${
                 phrase.length > 600
-                  ? "text-small"
+                  ? "text-base"
                   : phrase.length > 250
-                    ? "text-medium"
-                    : ""
-              }
+                    ? "text-[19px]"
+                    : "text-[clamp(16px,2vw,26px)] max-[600px]:text-[21px]"
+              }`}
               value={phrase}
               onChange={(event) => setPhrase(event.target.value)}
               onKeyDown={(event) => {
@@ -757,9 +809,9 @@ export default function Page() {
               maxLength={5000}
               placeholder="Enter text"
             />
-            <div className="source-footer">
+            <div className="mt-5 flex items-center justify-between text-xs font-semibold text-muted-ink">
               <button
-                className={`icon-button ${isListening ? "is-active" : ""}`}
+                className={`grid size-9 place-items-center rounded-[9px] text-primary hover:bg-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${isListening ? "bg-hover" : ""}`}
                 onClick={toggleListening}
                 title="Dictate text"
                 aria-label="Dictate text"
@@ -770,25 +822,29 @@ export default function Page() {
             </div>
           </div>
           <button
-            className="translate-button"
+            className="mt-[19px] inline-flex h-[47px] min-w-[152px] items-center justify-center gap-[9px] rounded-[11px] bg-primary px-6 text-sm font-[750] text-white hover:bg-primary-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50 dark:text-[#172042]"
             onClick={() => void translate()}
             disabled={isLoading || !phrase.trim()}
           >
-            {isLoading && <LoaderCircle className="spin" size={18} />}
+            {isLoading && (
+              <LoaderCircle className="animate-quick-spin" size={18} />
+            )}
             {isLoading ? "Translating" : "Translate"}
           </button>
-          <p className="keyboard-hint">Ctrl + Enter to translate</p>
+          <p className="mt-[10px] text-[11px] font-medium text-muted-ink">
+            Ctrl + Enter to translate
+          </p>
         </section>
         <section
           ref={resultsRef}
-          className="results-pane"
+          className="min-w-0 max-[900px]:scroll-mt-[14px]"
           aria-label="Translations"
         >
-          <div className="results-header">
-            <span className="to-label">Translate to</span>
+          <div className="mb-3 flex min-h-[39px] items-center justify-between gap-[14px] text-[13px] font-bold text-muted-ink max-[360px]:flex-wrap max-[360px]:gap-2 [&>span]:pl-[11px]">
+            <span>Translate to</span>
             <LanguagePicker items={availableLanguages} onSelect={addLanguage}>
               <button
-                className="add-language"
+                className="inline-flex h-[38px] items-center justify-center gap-[7px] rounded-[9px] border border-line bg-paper px-[13px] text-xs font-[750] whitespace-nowrap text-ink hover:bg-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary max-[600px]:px-[9px] max-[600px]:text-[11px] max-[360px]:ml-auto"
                 disabled={availableLanguages.length === 0}
               >
                 <Plus size={17} /> Add language
@@ -799,7 +855,7 @@ export default function Page() {
             axis="y"
             values={selectedLanguages}
             onReorder={reorderLanguages}
-            className="results-list"
+            className="grid content-start gap-[13px]"
           >
             {selectedLanguages.map((language, index) => {
               const translation =
@@ -819,15 +875,17 @@ export default function Page() {
               return (
                 <Reorder.Item
                   value={language}
-                  className="translation-card"
+                  className="flex min-h-[218px] flex-col rounded-[15px] border border-line bg-paper px-[19px] pt-[17px] pb-[13px] focus-within:border-[color-mix(in_srgb,var(--primary)_35%,var(--line))] hover:border-[color-mix(in_srgb,var(--primary)_35%,var(--line))] max-[600px]:px-[14px] max-[600px]:pt-[14px] max-[600px]:pb-[10px]"
                   key={translation.locale}
                   layout="position"
-                  transition={{ layout: { type: "spring", stiffness: 320, damping: 30 } }}
+                  transition={{
+                    layout: { type: "spring", stiffness: 320, damping: 30 },
+                  }}
                   whileDrag={{ scale: 1.01, zIndex: 1 }}
                 >
-                  <div className="card-heading">
+                  <div className="flex items-center gap-2 max-[600px]:gap-1">
                     <button
-                      className="drag-handle"
+                      className="grid h-[30px] w-[25px] flex-none cursor-grab place-items-center rounded-[7px] p-0 text-muted-ink hover:bg-hover hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary active:cursor-grabbing"
                       aria-label={`Reorder ${translation.name} translation`}
                       title="Drag to reorder"
                     >
@@ -838,14 +896,14 @@ export default function Page() {
                       items={choices}
                       onSelect={(language) => changeLanguage(index, language)}
                     >
-                      <button className="language-button">
+                      <button className="mr-auto inline-flex items-center gap-1.5 rounded-[9px] border border-transparent bg-transparent px-[11px] py-2 text-[13px] font-bold whitespace-nowrap text-ink hover:bg-hover hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
                         {translation.name}
                         <ChevronDown size={15} />
                       </button>
                     </LanguagePicker>
-                    <div className="card-actions">
+                    <div className="ml-auto flex items-center gap-0.5">
                       <button
-                        className="card-action"
+                        className="grid size-8 place-items-center rounded-lg p-0 text-muted-ink hover:bg-hover hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary max-[600px]:size-[29px]"
                         onClick={() => void copy(translation)}
                         aria-label={
                           copied === translation.locale
@@ -865,7 +923,7 @@ export default function Page() {
                         )}
                       </button>
                       <button
-                        className="card-action"
+                        className="grid size-8 place-items-center rounded-lg p-0 text-muted-ink hover:bg-hover hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary max-[600px]:size-[29px]"
                         onClick={() =>
                           speak(translation.text, translation.locale)
                         }
@@ -875,7 +933,7 @@ export default function Page() {
                         <Volume2 size={17} />
                       </button>
                       <button
-                        className={`card-action ${isStarred ? "starred" : ""}`}
+                        className={`grid size-8 place-items-center rounded-lg p-0 text-muted-ink hover:bg-hover hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary max-[600px]:size-[29px] ${isStarred ? "bg-hover text-primary" : ""}`}
                         onClick={() => toggleSaved(translation)}
                         aria-label={
                           isStarred ? "Remove from saved" : "Save translation"
@@ -891,20 +949,24 @@ export default function Page() {
                       </button>
                       <DropdownMenu>
                         <DropdownMenuTrigger
-                          className="more-button"
+                          className="grid size-[34px] place-items-center rounded-[9px] p-0 text-muted-ink hover:bg-hover hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary max-[600px]:size-[29px]"
                           aria-label={`More actions for ${translation.name}`}
                           title="More actions"
                         >
                           <MoreHorizontal size={20} />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent
-                          className="action-menu"
+                          className="!min-w-[186px] !rounded-[13px] !border !border-line !bg-[var(--popover)] !text-ink !shadow-[0_15px_34px_rgba(18,28,59,0.18)] [&_[data-slot=dropdown-menu-item]]:cursor-pointer [&_[data-slot=dropdown-menu-item]]:rounded-lg [&_[data-slot=dropdown-menu-item]]:transition-colors [&_[data-slot=dropdown-menu-item]:not([data-disabled]):hover]:bg-hover [&_[data-slot=dropdown-menu-item]:not([data-disabled]):hover]:text-primary"
                           align="end"
                         >
                           <DropdownMenuItem
                             onClick={() => {
                               const next = [...selectedLanguages]
-                              next.splice(index - 1, 0, ...next.splice(index, 1))
+                              next.splice(
+                                index - 1,
+                                0,
+                                ...next.splice(index, 1)
+                              )
                               reorderLanguages(next)
                             }}
                             disabled={index === 0}
@@ -914,7 +976,11 @@ export default function Page() {
                           <DropdownMenuItem
                             onClick={() => {
                               const next = [...selectedLanguages]
-                              next.splice(index + 1, 0, ...next.splice(index, 1))
+                              next.splice(
+                                index + 1,
+                                0,
+                                ...next.splice(index, 1)
+                              )
                               reorderLanguages(next)
                             }}
                             disabled={index === selectedLanguages.length - 1}
@@ -939,7 +1005,7 @@ export default function Page() {
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             onClick={() => removeLanguage(index)}
-                            className="remove-action"
+                            className="!text-[#bd4a53] dark:!text-[#ffabb3]"
                           >
                             <Trash2 size={16} /> Remove language
                           </DropdownMenuItem>
@@ -948,13 +1014,13 @@ export default function Page() {
                     </div>
                   </div>
                   <div
-                    className={`translation-text ${translation.text.length > 600 ? "text-small" : translation.text.length > 250 ? "text-medium" : ""}`}
+                    className={`min-h-[116px] flex-none px-1 pt-[21px] pb-5 text-[clamp(16px,2vw,26px)] leading-normal font-[550] tracking-[-0.03em] wrap-anywhere text-ink ${translation.text.length > 600 ? "text-base" : translation.text.length > 250 ? "text-[19px]" : ""}`}
                     lang={translation.locale}
                     dir={translation.locale === "ar" ? "rtl" : "auto"}
                   >
                     {isLoading ? (
                       <span
-                        className="loading-dots"
+                        className="inline-flex min-w-[2.2em] items-baseline text-[1.2em] font-extrabold tracking-[0.12em] text-primary [&_span]:animate-dot-pulse [&_span:nth-child(2)]:[animation-delay:0.18s] [&_span:nth-child(3)]:[animation-delay:0.36s]"
                         role="status"
                         aria-label="Translating"
                       >
@@ -970,7 +1036,7 @@ export default function Page() {
               )
             })}
             {selectedLanguages.length === 0 && (
-              <div className="no-results">
+              <div className="grid min-h-[210px] place-content-center justify-items-center rounded-[15px] border border-dashed border-line text-muted-ink [&_button]:inline-flex [&_button]:items-center [&_button]:gap-1.5 [&_button]:rounded-lg [&_button]:bg-teal-soft [&_button]:px-3 [&_button]:py-2 [&_button]:font-bold [&_button]:text-primary">
                 <p>No target languages yet.</p>
                 <LanguagePicker
                   items={availableLanguages}
@@ -1009,10 +1075,14 @@ function LanguagePicker({
       }}
     >
       <DropdownMenuTrigger render={children} />
-      <DropdownMenuContent className="language-menu" align="start">
-        <div className="language-search">
+      <DropdownMenuContent
+        className="!h-[min(420px,var(--available-height))] !w-[290px] overflow-hidden !rounded-[13px] !border !border-line !bg-[var(--popover)] !p-0 !text-ink !shadow-[0_15px_34px_rgba(18,28,59,0.18)] max-[600px]:!w-[min(290px,calc(100vw-24px))] [&_[data-slot=dropdown-menu-item]]:cursor-pointer [&_[data-slot=dropdown-menu-item]]:transition-colors [&_[data-slot=dropdown-menu-item]:not([data-disabled]):hover]:bg-hover [&_[data-slot=dropdown-menu-item]:not([data-disabled]):hover]:text-primary"
+        align="start"
+      >
+        <div className="m-[9px] flex items-center gap-[9px] rounded-[9px] border border-line px-[11px] text-muted-ink">
           <Search size={15} />
           <input
+            className="h-[39px] w-full border-0 bg-transparent text-[13px] text-ink outline-none focus:outline-none"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             onKeyDown={(event) => event.stopPropagation()}
@@ -1021,7 +1091,7 @@ function LanguagePicker({
             autoFocus
           />
         </div>
-        <div className="language-list">
+        <div className="max-h-[350px] [scrollbar-width:thin] [scrollbar-color:var(--line)_transparent] overflow-y-auto px-1.5 pb-[7px] [&_[data-slot=dropdown-menu-item]]:rounded-lg [&_[data-slot=dropdown-menu-item]]:p-[9px] [&_[data-slot=dropdown-menu-item]]:text-[13px] [&_[data-slot=dropdown-menu-item]]:font-medium [&_p]:m-[14px] [&_p]:text-xs [&_p]:text-muted-ink">
           {filtered.length ? (
             filtered.map((language) => (
               <DropdownMenuItem
@@ -1051,22 +1121,27 @@ function HistoryMenu({
 }) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="nav-action nav-desktop-action">
+      <DropdownMenuTrigger className="inline-flex h-[38px] items-center justify-center gap-[7px] rounded-[10px] px-[11px] text-[13px] font-[650] whitespace-nowrap text-ink hover:bg-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary max-[768px]:hidden max-[600px]:gap-[3px] max-[600px]:px-[5px] max-[600px]:text-[0] max-[360px]:px-[3px]">
         <Clock3 size={17} /> History{" "}
-        <span className="nav-count">{items.length}</span>
+        <span className="grid h-[21px] min-w-[21px] place-items-center rounded-[7px] bg-hover px-[5px] text-[11px] font-[750] text-primary max-[600px]:text-[10px] max-[360px]:hidden">
+          {items.length}
+        </span>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="nav-menu" align="end">
+      <DropdownMenuContent
+        className="!max-h-[470px] !w-[min(370px,calc(100vw-24px))] overflow-hidden !rounded-[13px] !border !border-line !bg-[var(--popover)] !text-ink !shadow-[0_15px_34px_rgba(18,28,59,0.18)] [&_[data-slot=dropdown-menu-item]]:cursor-pointer [&_[data-slot=dropdown-menu-item]]:transition-colors [&_[data-slot=dropdown-menu-item]:not([data-disabled]):hover]:bg-hover [&_[data-slot=dropdown-menu-item]:not([data-disabled]):hover]:text-primary [&_[data-slot=dropdown-menu-label]]:font-[650]"
+        align="end"
+      >
         <DropdownMenuGroup>
           <DropdownMenuLabel>Recent translations</DropdownMenuLabel>
         </DropdownMenuGroup>
         {items.length ? (
           items.slice(0, 5).map((item, index) => (
             <div
-              className="history-row"
+              className="flex items-center gap-0.5"
               key={`${item.id ?? item.phrase}-${index}`}
             >
               <DropdownMenuItem
-                className="history-item"
+                className="min-w-0 flex-1 cursor-pointer justify-between rounded-lg font-normal transition-colors hover:bg-hover hover:text-ink [&_b]:overflow-hidden [&_b]:text-[13px] [&_b]:font-[650] [&_b]:text-ellipsis [&_b]:text-ink [&_span]:grid [&_span]:min-w-0 [&_span]:gap-[3px] [&_span]:overflow-hidden [&_span]:text-xs [&_span]:text-ellipsis [&_span]:whitespace-nowrap [&_span]:text-muted-ink"
                 onClick={() => onSelect(item)}
               >
                 <span>
@@ -1077,7 +1152,7 @@ function HistoryMenu({
                 </span>
               </DropdownMenuItem>
               <button
-                className="history-delete"
+                className="grid size-[34px] flex-none place-items-center rounded-lg text-muted-ink hover:bg-hover hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                 onClick={() => onDelete(item)}
                 aria-label={`Delete history: ${item.phrase}`}
                 title="Delete from history"
@@ -1087,11 +1162,13 @@ function HistoryMenu({
             </div>
           ))
         ) : (
-          <p className="empty-state">Your recent translations appear here.</p>
+          <p className="mx-3 mt-1.5 mb-[15px] text-xs text-muted-ink">
+            Your recent translations appear here.
+          </p>
         )}
         {items.length > 0 && (
           <DropdownMenuItem
-            className="view-all-item"
+            className="mt-4 mb-1 !justify-between !rounded-none border-t border-line !font-bold !text-primary transition-colors hover:!bg-hover hover:!text-primary-hover"
             render={<Link href="/history" />}
           >
             View all history <ChevronRight size={15} />
@@ -1110,11 +1187,16 @@ function SavedMenu({
 }) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="nav-action nav-desktop-action">
+      <DropdownMenuTrigger className="inline-flex h-[38px] items-center justify-center gap-[7px] rounded-[10px] px-[11px] text-[13px] font-[650] whitespace-nowrap text-ink hover:bg-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary max-[768px]:hidden max-[600px]:gap-[3px] max-[600px]:px-[5px] max-[600px]:text-[0] max-[360px]:px-[3px]">
         <Star size={17} /> Saved{" "}
-        <span className="nav-count">{items.length}</span>
+        <span className="grid h-[21px] min-w-[21px] place-items-center rounded-[7px] bg-hover px-[5px] text-[11px] font-[750] text-primary max-[600px]:text-[10px] max-[360px]:hidden">
+          {items.length}
+        </span>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="nav-menu" align="end">
+      <DropdownMenuContent
+        className="!max-h-[470px] !w-[min(370px,calc(100vw-24px))] overflow-hidden !rounded-[13px] !border !border-line !bg-[var(--popover)] !text-ink !shadow-[0_15px_34px_rgba(18,28,59,0.18)] [&_[data-slot=dropdown-menu-item]]:cursor-pointer [&_[data-slot=dropdown-menu-item]]:transition-colors [&_[data-slot=dropdown-menu-item]:not([data-disabled]):hover]:bg-hover [&_[data-slot=dropdown-menu-item]:not([data-disabled]):hover]:text-primary [&_[data-slot=dropdown-menu-label]]:font-[650]"
+        align="end"
+      >
         <DropdownMenuGroup>
           <DropdownMenuLabel>Saved translations</DropdownMenuLabel>
         </DropdownMenuGroup>
@@ -1122,7 +1204,7 @@ function SavedMenu({
           items.slice(0, 5).map((item, index) => (
             <DropdownMenuItem
               key={`${item.id ?? item.phrase}-${index}`}
-              className="history-item"
+              className="min-w-0 flex-1 cursor-pointer justify-between rounded-lg font-normal transition-colors hover:bg-hover hover:text-ink [&_b]:overflow-hidden [&_b]:text-[13px] [&_b]:font-[650] [&_b]:text-ellipsis [&_b]:text-ink [&_span]:grid [&_span]:min-w-0 [&_span]:gap-[3px] [&_span]:overflow-hidden [&_span]:text-xs [&_span]:text-ellipsis [&_span]:whitespace-nowrap [&_span]:text-muted-ink"
               onClick={() => onSelect(item)}
             >
               <span>
@@ -1132,11 +1214,13 @@ function SavedMenu({
             </DropdownMenuItem>
           ))
         ) : (
-          <p className="empty-state">Star a translation to keep it close.</p>
+          <p className="mx-3 mt-1.5 mb-[15px] text-xs text-muted-ink">
+            Star a translation to keep it close.
+          </p>
         )}
         {items.length > 0 && (
           <DropdownMenuItem
-            className="view-all-item"
+            className="mt-4 mb-1 !justify-between !rounded-none border-t border-line !font-bold !text-primary transition-colors hover:!bg-hover hover:!text-primary-hover"
             render={<Link href="/saved" />}
           >
             View all saved <ChevronRight size={15} />

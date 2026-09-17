@@ -89,33 +89,41 @@ export default function HistoryPage() {
   }, [hasMore, loadMore])
 
   return (
-    <main className="app-shell library-page">
+    <main className="min-h-screen bg-canvas text-ink">
       <SiteHeader />
-      <section className="library-main">
-        <div className="library-heading">
+      <section className="mx-auto w-[min(900px,calc(100%-48px))] py-[58px] pb-20 max-[600px]:w-[calc(100%-28px)] max-[600px]:pt-9">
+        <div className="mb-7 flex items-end justify-between gap-[18px] [&_h1]:text-[clamp(32px,5vw,48px)] [&_h1]:tracking-[-0.06em] [&_h1]:text-ink">
           <div>
-            <p className="library-kicker">Your translations</p>
+            <p className="mb-[7px] text-xs font-extrabold tracking-[0.08em] text-primary uppercase">
+              Your translations
+            </p>
             <h1>History</h1>
           </div>
-          <span className="library-count">{items.length} shown</span>
+          <span className="text-xs font-bold text-muted-ink">
+            {items.length} shown
+          </span>
         </div>
         {isLoading ? (
-          <div className="library-empty">Loading history…</div>
+          <div className="grid min-h-[220px] place-items-center rounded-2xl border border-dashed border-line text-sm text-muted-ink">
+            Loading history…
+          </div>
         ) : items.length ? (
-          <div className="library-list">
+          <div className="grid gap-3">
             {items.map((item, itemIndex) => (
               <article
-                className="library-item"
+                className="rounded-2xl border border-line bg-paper px-6 pt-[22px] pb-6 max-[600px]:p-[18px] [&_h2]:mt-[17px] [&_h2]:mb-[15px] [&_h2]:text-[clamp(20px,3vw,27px)] [&_h2]:leading-[1.35] [&_h2]:font-semibold [&_h2]:tracking-[-0.04em] [&_h2]:text-ink"
                 key={`history-${item.id ?? item.createdAt ?? item.phrase ?? "item"}-${itemIndex}`}
               >
-                <div className="library-item-meta">
+                <div className="flex justify-between gap-[14px] text-[11px] font-bold text-muted-ink max-[600px]:flex-col max-[600px]:items-start max-[600px]:gap-[5px]">
                   <time dateTime={item.createdAt}>
                     {new Date(item.createdAt).toLocaleString()}
                   </time>
-                  <span>{item.translations.map((item) => item.name).join(", ")}</span>
+                  <span>
+                    {item.translations.map((item) => item.name).join(", ")}
+                  </span>
                 </div>
                 <h2>{item.phrase}</h2>
-                <div className="library-translations">
+                <div className="grid gap-2 border-t border-line pt-[15px] [&_b]:text-[11px] [&_b]:font-extrabold [&_b]:tracking-[0.04em] [&_b]:text-primary [&_b]:uppercase [&_p]:grid [&_p]:gap-[5px] [&_p]:text-[15px] [&_p]:leading-[1.6] [&_p]:text-ink">
                   {item.translations.map((translation, translationIndex) => (
                     <p
                       key={`translation-${item.id ?? item.createdAt ?? item.phrase ?? "item"}-${translation.locale ?? translation.name ?? "language"}-${translationIndex}`}
@@ -129,10 +137,16 @@ export default function HistoryPage() {
             ))}
           </div>
         ) : (
-          <div className="library-empty">Your recent translations appear here.</div>
+          <div className="grid min-h-[220px] place-items-center rounded-2xl border border-dashed border-line text-sm text-muted-ink">
+            Your recent translations appear here.
+          </div>
         )}
-        <div ref={loadMoreRef} className="library-sentinel" aria-hidden="true" />
-        {hasMore && <p className="library-loading">Loading more…</p>}
+        <div ref={loadMoreRef} className="h-px" aria-hidden="true" />
+        {hasMore && (
+          <p className="mt-[18px] text-center text-xs text-muted-ink">
+            Loading more…
+          </p>
+        )}
       </section>
     </main>
   )
