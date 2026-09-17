@@ -10,16 +10,31 @@ async function getUserId() {
   }
 }
 
-export async function GET() {
+export async function GET(request: Request) {
   const userId = await getUserId()
   if (!userId || !pool)
-    return NextResponse.json({ signedIn: Boolean(userId), history: [] })
+    return NextResponse.json({
+      signedIn: Boolean(userId),
+      history: [],
+      hasMore: false,
+    })
+  const url = new URL(request.url)
+  const limit = Math.min(50, Math.max(1, Number(url.searchParams.get("limit") ?? 8)))
+  const offset = Math.max(0, Number(url.searchParams.get("offset") ?? 0))
   await ensureDatabase()
   const result = await pool.query(
-    'SELECT id, phrase, translations, created_at AS "createdAt" FROM translation_history WHERE user_id = $1 ORDER BY created_at DESC LIMIT 8',
+    'SELECT id, phrase, translations, created_at AS "createdAt" FROM translation_history WHERE user_id = $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3',
+    [userId, limit, offset]
+  )
+  const count = await pool.query(
+    "SELECT COUNT(*)::int AS count FROM translation_history WHERE user_id = $1",
     [userId]
   )
-  return NextResponse.json({ signedIn: true, history: result.rows })
+  return NextResponse.json({
+    signedIn: true,
+    history: result.rows,
+    hasMore: offset + result.rows.length < count.rows[0].count,
+  })
 }
 
 export async function POST(request: Request) {
