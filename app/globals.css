@@ -36,9 +36,17 @@ button:disabled {
     transform: rotate(360deg);
   }
 }
-@keyframes shimmer {
-  to {
-    background-position: -150% 0;
+@keyframes dot-pulse {
+  0%,
+  20% {
+    opacity: 0.25;
+  }
+  45%,
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.25;
   }
 }
 

@@ -1,10 +1,9 @@
 "use client"
 
 import { useCallback, useEffect, useRef, useState } from "react"
-import { ArrowLeft, Clock3 } from "lucide-react"
-import Link from "next/link"
+import { SiteHeader } from "@/components/site-nav"
 
-type Translation = { name: string; text: string }
+type Translation = { locale?: string; name: string; text: string }
 type HistoryItem = {
   id: string
   phrase: string
@@ -91,19 +90,7 @@ export default function HistoryPage() {
 
   return (
     <main className="app-shell library-page">
-      <nav className="topbar">
-        <Link href="/#workspace" className="brand">
-          <span className="brand-mark">
-            <Clock3 size={20} strokeWidth={2.3} />
-          </span>
-          <span>
-            multi<span className="brand-accent">lingo</span>
-          </span>
-        </Link>
-        <Link href="/#workspace" className="library-back-link">
-          <ArrowLeft size={16} /> Back to translator
-        </Link>
-      </nav>
+      <SiteHeader />
       <section className="library-main">
         <div className="library-heading">
           <div>
@@ -116,8 +103,11 @@ export default function HistoryPage() {
           <div className="library-empty">Loading history…</div>
         ) : items.length ? (
           <div className="library-list">
-            {items.map((item) => (
-              <article className="library-item" key={item.id}>
+            {items.map((item, itemIndex) => (
+              <article
+                className="library-item"
+                key={`history-${item.id ?? item.createdAt ?? item.phrase ?? "item"}-${itemIndex}`}
+              >
                 <div className="library-item-meta">
                   <time dateTime={item.createdAt}>
                     {new Date(item.createdAt).toLocaleString()}
@@ -126,8 +116,10 @@ export default function HistoryPage() {
                 </div>
                 <h2>{item.phrase}</h2>
                 <div className="library-translations">
-                  {item.translations.map((translation) => (
-                    <p key={`${item.id}-${translation.name}`}>
+                  {item.translations.map((translation, translationIndex) => (
+                    <p
+                      key={`translation-${item.id ?? item.createdAt ?? item.phrase ?? "item"}-${translation.locale ?? translation.name ?? "language"}-${translationIndex}`}
+                    >
                       <b>{translation.name}</b>
                       {translation.text}
                     </p>

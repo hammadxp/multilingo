@@ -1,8 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { ArrowLeft, Star } from "lucide-react"
-import Link from "next/link"
+import { SiteHeader } from "@/components/site-nav"
 
 type Translation = { name: string; text: string }
 type SavedItem = {
@@ -59,19 +58,7 @@ export default function SavedPage() {
 
   return (
     <main className="app-shell library-page">
-      <nav className="topbar">
-        <Link href="/#workspace" className="brand">
-          <span className="brand-mark">
-            <Star size={20} strokeWidth={2.3} />
-          </span>
-          <span>
-            multi<span className="brand-accent">lingo</span>
-          </span>
-        </Link>
-        <Link href="/#workspace" className="library-back-link">
-          <ArrowLeft size={16} /> Back to translator
-        </Link>
-      </nav>
+      <SiteHeader />
       <section className="library-main">
         <div className="library-heading">
           <div>
@@ -82,8 +69,11 @@ export default function SavedPage() {
         </div>
         {items.length ? (
           <div className="library-list">
-            {items.map((item) => (
-              <article className="library-item" key={item.id}>
+            {items.map((item, itemIndex) => (
+              <article
+                className="library-item"
+                key={`saved-${item.id ?? item.createdAt ?? item.phrase ?? "item"}-${itemIndex}`}
+              >
                 <div className="library-item-meta">
                   <time dateTime={item.createdAt}>
                     {new Date(item.createdAt).toLocaleString()}

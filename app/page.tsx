@@ -10,8 +10,10 @@ import {
   ArrowDown,
   ArrowUp,
   GripVertical,
-  Languages,
+  Globe2,
+  Heart,
   LoaderCircle,
+  Menu,
   Mic,
   Moon,
   MoreHorizontal,
@@ -24,8 +26,11 @@ import {
   Volume2,
 } from "lucide-react"
 import Link from "next/link"
+import Image from "next/image"
 import { useTheme } from "next-themes"
+import { Reorder } from "framer-motion"
 import { AuthControls } from "@/components/auth-controls"
+import { SiteHeader } from "@/components/site-nav"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -35,7 +40,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-type Language = { code: string; name: string; locale: string; flag: string }
+type Language = { code: string; name: string; locale: string }
 type Translation = Language & { text: string }
 type SavedItem = {
   id: string
@@ -258,29 +263,35 @@ const languageRegions: Record<string, string> = {
   zu: "ZA",
 }
 function flagForLocale(locale: string) {
-  const region =
-    locale === "auto"
-      ? ""
-      : (locale.split("-")[1] ?? languageRegions[locale] ?? locale)
-  if (!/^[a-z]{2}$/i.test(region)) return "🌐"
-  return String.fromCodePoint(
-    ...region
-      .toUpperCase()
-      .split("")
-      .map((letter) => 127397 + letter.charCodeAt(0))
+  const region = languageRegions[locale] ?? new Intl.Locale(locale).maximize().region
+  return /^[a-z]{2}$/i.test(region ?? "") ? region.toLowerCase() : "un"
+}
+function LanguageFlag({ locale }: { locale: string }) {
+  if (locale === "auto") {
+    return <span className="language-flag language-flag-auto" aria-hidden="true"><Globe2 size={16} /></span>
+  }
+
+  return (
+    <span className="language-flag" aria-hidden="true">
+      <Image
+        src={`https://flagcdn.com/${flagForLocale(locale)}.svg`}
+        width={24}
+        height={18}
+        alt=""
+        unoptimized={false}
+      />
+    </span>
   )
 }
 const languages: Language[] = languageData.map(([code, name, locale]) => ({
   code,
   name,
   locale,
-  flag: flagForLocale(locale),
 }))
 const autoLanguage: Language = {
   code: "AUTO",
   name: "Auto detect",
   locale: "auto",
-  flag: "🌐",
 }
 const demos: Record<string, string> = {
   es: "Hola, ¿cómo estás?",
@@ -335,7 +346,6 @@ export default function Page() {
   const pendingHistoryDeletes = useRef(new Set<string>())
   const [languagesReady, setLanguagesReady] = useState(false)
   const [themeReady, setThemeReady] = useState(false)
-  const [dragIndex, setDragIndex] = useState<number | null>(null)
 
   useEffect(() => {
     queueMicrotask(() => {
@@ -487,15 +497,15 @@ export default function Page() {
       }).catch(() => undefined)
     }
   }
-  function moveLanguage(from: number, to: number) {
-    if (to < 0 || to >= selectedLanguages.length || from === to) return
-    const move = <T,>(items: T[]) => {
-      const next = [...items]
-      next.splice(to, 0, ...next.splice(from, 1))
-      return next
-    }
-    setSelectedLanguages(move)
-    setTranslations(move)
+  function reorderLanguages(nextLanguages: Language[]) {
+    setSelectedLanguages(nextLanguages)
+    setTranslations((items) =>
+      nextLanguages.map(
+        (language) =>
+          items.find((item) => item.locale === language.locale) ??
+          fallback(submittedPhrase, language)
+      )
+    )
   }
   function scrollToResults() {
     if (window.matchMedia("(max-width: 900px)").matches) {
@@ -513,6 +523,7 @@ export default function Page() {
   ) {
     const nextPhrase = phrase.trim() || submittedPhrase
     if (!nextPhrase || nextLanguages.length === 0) return
+    if (isLoading) return
     setIsLoading(true)
     setSubmittedPhrase(nextPhrase)
     scrollToResults()
@@ -635,16 +646,11 @@ export default function Page() {
 
   return (
     <main className="app-shell">
-      <nav className="topbar">
-        <a href="#workspace" className="brand">
-          <span className="brand-mark">
-            <Languages size={20} strokeWidth={2.3} />
-          </span>
-          <span>
-            multi<span className="brand-accent">lingo</span>
-          </span>
-        </a>
+      <SiteHeader>
         <div className="nav-right">
+          <button className="donate-button nav-desktop-action" type="button" aria-label="Donate to Multilingo">
+            <Heart size={16} /> Donate
+          </button>
           <HistoryMenu
             items={history}
             onSelect={openHistory}
@@ -684,12 +690,32 @@ export default function Page() {
           ) : (
             <button className="auth-button">Sign in</button>
           )}
+          <DropdownMenu>
+            <DropdownMenuTrigger className="nav-mobile-menu" aria-label="Open navigation menu">
+              <Menu size={19} />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="nav-menu mobile-nav-menu" align="end">
+              <DropdownMenuItem className="mobile-nav-item" onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}>
+                {themeReady && resolvedTheme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
+                {themeReady && resolvedTheme === "dark" ? "Light mode" : "Dark mode"}
+              </DropdownMenuItem>
+              <DropdownMenuItem className="mobile-nav-item" render={<Link href="/saved" />}>
+                <Star size={16} /> Saved <span className="nav-count">{saved.length}</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem className="mobile-nav-item" render={<Link href="/history" />}>
+                <Clock3 size={16} /> History <span className="nav-count">{history.length}</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem className="mobile-nav-item">
+                <Heart size={16} /> Donate
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
-      </nav>
+      </SiteHeader>
       <section id="workspace" className="workspace">
         <section className="source-pane" aria-label="Original text">
           <div className="pane-heading">
-            <span>From</span>
+            <span>Translate from</span>
             <LanguagePicker
               items={[autoLanguage, ...languages]}
               onSelect={(language) => {
@@ -718,8 +744,15 @@ export default function Page() {
               value={phrase}
               onChange={(event) => setPhrase(event.target.value)}
               onKeyDown={(event) => {
-                if ((event.ctrlKey || event.metaKey) && event.key === "Enter")
+                if (
+                  (event.ctrlKey || event.metaKey) &&
+                  typeof event.key === "string" &&
+                  event.key.toLowerCase() === "enter"
+                ) {
+                  event.preventDefault()
+                  event.stopPropagation()
                   void translate()
+                }
               }}
               maxLength={5000}
               placeholder="Enter text"
@@ -752,7 +785,7 @@ export default function Page() {
           aria-label="Translations"
         >
           <div className="results-header">
-            <span>To</span>
+            <span className="to-label">Translate to</span>
             <LanguagePicker items={availableLanguages} onSelect={addLanguage}>
               <button
                 className="add-language"
@@ -762,7 +795,12 @@ export default function Page() {
               </button>
             </LanguagePicker>
           </div>
-          <div className="results-list">
+          <Reorder.Group
+            axis="y"
+            values={selectedLanguages}
+            onReorder={reorderLanguages}
+            className="results-list"
+          >
             {selectedLanguages.map((language, index) => {
               const translation =
                 translations.find((item) => item.locale === language.locale) ??
@@ -779,29 +817,23 @@ export default function Page() {
                   )
               )
               return (
-                <article
+                <Reorder.Item
+                  value={language}
                   className="translation-card"
-                  key={`${translation.locale}-${index}`}
-                  onDragOver={(event) => event.preventDefault()}
-                  onDrop={() => {
-                    if (dragIndex !== null) moveLanguage(dragIndex, index)
-                    setDragIndex(null)
-                  }}
+                  key={translation.locale}
+                  layout="position"
+                  transition={{ layout: { type: "spring", stiffness: 320, damping: 30 } }}
+                  whileDrag={{ scale: 1.01, zIndex: 1 }}
                 >
                   <div className="card-heading">
                     <button
                       className="drag-handle"
-                      draggable
-                      onDragStart={() => setDragIndex(index)}
-                      onDragEnd={() => setDragIndex(null)}
                       aria-label={`Reorder ${translation.name} translation`}
                       title="Drag to reorder"
                     >
                       <GripVertical size={17} />
                     </button>
-                    <span className="language-flag" aria-hidden="true">
-                      {translation.flag}
-                    </span>
+                    <LanguageFlag locale={translation.locale} />
                     <LanguagePicker
                       items={choices}
                       onSelect={(language) => changeLanguage(index, language)}
@@ -870,13 +902,21 @@ export default function Page() {
                           align="end"
                         >
                           <DropdownMenuItem
-                            onClick={() => moveLanguage(index, index - 1)}
+                            onClick={() => {
+                              const next = [...selectedLanguages]
+                              next.splice(index - 1, 0, ...next.splice(index, 1))
+                              reorderLanguages(next)
+                            }}
                             disabled={index === 0}
                           >
                             <ArrowUp size={16} /> Move up
                           </DropdownMenuItem>
                           <DropdownMenuItem
-                            onClick={() => moveLanguage(index, index + 1)}
+                            onClick={() => {
+                              const next = [...selectedLanguages]
+                              next.splice(index + 1, 0, ...next.splice(index, 1))
+                              reorderLanguages(next)
+                            }}
                             disabled={index === selectedLanguages.length - 1}
                           >
                             <ArrowDown size={16} /> Move down
@@ -913,12 +953,20 @@ export default function Page() {
                     dir={translation.locale === "ar" ? "rtl" : "auto"}
                   >
                     {isLoading ? (
-                      <span className="skeleton" />
+                      <span
+                        className="loading-dots"
+                        role="status"
+                        aria-label="Translating"
+                      >
+                        <span aria-hidden="true">.</span>
+                        <span aria-hidden="true">.</span>
+                        <span aria-hidden="true">.</span>
+                      </span>
                     ) : (
                       translation.text
                     )}
                   </div>
-                </article>
+                </Reorder.Item>
               )
             })}
             {selectedLanguages.length === 0 && (
@@ -934,7 +982,7 @@ export default function Page() {
                 </LanguagePicker>
               </div>
             )}
-          </div>
+          </Reorder.Group>
         </section>
       </section>
     </main>
@@ -980,7 +1028,7 @@ function LanguagePicker({
                 key={language.locale}
                 onClick={() => onSelect(language)}
               >
-                <span className="language-code">{language.code}</span>
+                <LanguageFlag locale={language.locale} />
                 <span>{language.name}</span>
               </DropdownMenuItem>
             ))
@@ -1003,7 +1051,7 @@ function HistoryMenu({
 }) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="nav-action">
+      <DropdownMenuTrigger className="nav-action nav-desktop-action">
         <Clock3 size={17} /> History{" "}
         <span className="nav-count">{items.length}</span>
       </DropdownMenuTrigger>
@@ -1019,7 +1067,6 @@ function HistoryMenu({
             >
               <DropdownMenuItem
                 className="history-item"
-                render={<a href="#workspace" />}
                 onClick={() => onSelect(item)}
               >
                 <span>
@@ -1063,7 +1110,7 @@ function SavedMenu({
 }) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="nav-action">
+      <DropdownMenuTrigger className="nav-action nav-desktop-action">
         <Star size={17} /> Saved{" "}
         <span className="nav-count">{items.length}</span>
       </DropdownMenuTrigger>
@@ -1076,7 +1123,6 @@ function SavedMenu({
             <DropdownMenuItem
               key={`${item.id ?? item.phrase}-${index}`}
               className="history-item"
-              render={<a href="#workspace" />}
               onClick={() => onSelect(item)}
             >
               <span>
