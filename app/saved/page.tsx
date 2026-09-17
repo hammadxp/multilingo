@@ -2,22 +2,16 @@
 
 import { useEffect, useRef, useState } from "react"
 import { SiteHeader } from "@/components/site-nav"
-
-type Translation = { name: string; text: string }
-type SavedItem = {
-  id: string
-  phrase: string
-  translation: Translation
-  createdAt: string
-}
+import type { SavedItem } from "@/lib/translation-types"
 
 const PAGE_SIZE = 12
 
 function readSaved() {
   try {
-    return JSON.parse(
+    const value: unknown = JSON.parse(
       localStorage.getItem("multilingo-saved") ?? "[]"
-    ) as SavedItem[]
+    )
+    return Array.isArray(value) ? (value as SavedItem[]) : []
   } catch {
     return []
   }
@@ -25,36 +19,37 @@ function readSaved() {
 
 export default function SavedPage() {
   const [allItems, setAllItems] = useState<SavedItem[]>([])
-  const [items, setItems] = useState<SavedItem[]>([])
-  const [hasMore, setHasMore] = useState(false)
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE)
   const loadMoreRef = useRef<HTMLDivElement>(null)
+  const items = allItems.slice(0, visibleCount)
+  const hasMore = visibleCount < allItems.length
 
   useEffect(() => {
+    let active = true
     const saved = readSaved()
     queueMicrotask(() => {
-      setAllItems(saved)
-      setItems(saved.slice(0, PAGE_SIZE))
-      setHasMore(saved.length > PAGE_SIZE)
+      if (active) setAllItems(saved)
     })
+    return () => {
+      active = false
+    }
   }, [])
 
   useEffect(() => {
     const target = loadMoreRef.current
-    if (!target) return
+    if (!target || !hasMore) return
     const observer = new IntersectionObserver(
       (entries) => {
-        if (!entries[0]?.isIntersecting || !hasMore) return
-        setItems((current) => {
-          const next = allItems.slice(0, current.length + PAGE_SIZE)
-          setHasMore(next.length < allItems.length)
-          return next
-        })
+        if (entries[0]?.isIntersecting)
+          setVisibleCount((count) =>
+            Math.min(count + PAGE_SIZE, allItems.length)
+          )
       },
       { rootMargin: "240px" }
     )
     observer.observe(target)
     return () => observer.disconnect()
-  }, [allItems, hasMore])
+  }, [allItems.length, hasMore])
 
   return (
     <main className="min-h-screen bg-canvas text-ink">
@@ -73,10 +68,10 @@ export default function SavedPage() {
         </div>
         {items.length ? (
           <div className="grid gap-3">
-            {items.map((item, itemIndex) => (
+            {items.map((item) => (
               <article
                 className="rounded-2xl border border-line bg-paper px-6 pt-[22px] pb-6 max-[600px]:p-[18px] [&_h2]:mt-[17px] [&_h2]:mb-[15px] [&_h2]:text-[clamp(20px,3vw,27px)] [&_h2]:leading-[1.35] [&_h2]:font-semibold [&_h2]:tracking-[-0.04em] [&_h2]:text-ink"
-                key={`saved-${item.id ?? item.createdAt ?? item.phrase ?? "item"}-${itemIndex}`}
+                key={item.id}
               >
                 <div className="flex justify-between gap-[14px] text-[11px] font-bold text-muted-ink max-[600px]:flex-col max-[600px]:items-start max-[600px]:gap-[5px]">
                   <time dateTime={item.createdAt}>

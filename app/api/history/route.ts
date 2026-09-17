@@ -10,6 +10,18 @@ async function getUserId() {
   }
 }
 
+function boundedInteger(
+  value: string | null,
+  fallback: number,
+  min: number,
+  max: number
+) {
+  const parsed = value === null ? fallback : Number(value)
+  return Number.isSafeInteger(parsed)
+    ? Math.min(max, Math.max(min, parsed))
+    : fallback
+}
+
 export async function GET(request: Request) {
   const userId = await getUserId()
   if (!userId || !pool)
@@ -19,17 +31,19 @@ export async function GET(request: Request) {
       hasMore: false,
     })
   const url = new URL(request.url)
-  const limit = Math.min(50, Math.max(1, Number(url.searchParams.get("limit") ?? 8)))
-  const offset = Math.max(0, Number(url.searchParams.get("offset") ?? 0))
+  const limit = boundedInteger(url.searchParams.get("limit"), 8, 1, 50)
+  const offset = boundedInteger(url.searchParams.get("offset"), 0, 0, 1_000_000)
   await ensureDatabase()
-  const result = await pool.query(
-    'SELECT id, phrase, translations, created_at AS "createdAt" FROM translation_history WHERE user_id = $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3',
-    [userId, limit, offset]
-  )
-  const count = await pool.query(
-    "SELECT COUNT(*)::int AS count FROM translation_history WHERE user_id = $1",
-    [userId]
-  )
+  const [result, count] = await Promise.all([
+    pool.query(
+      'SELECT id, phrase, translations, created_at AS "createdAt" FROM translation_history WHERE user_id = $1 ORDER BY created_at DESC, id DESC LIMIT $2 OFFSET $3',
+      [userId, limit, offset]
+    ),
+    pool.query(
+      "SELECT COUNT(*)::int AS count FROM translation_history WHERE user_id = $1",
+      [userId]
+    ),
+  ])
   return NextResponse.json({
     signedIn: true,
     history: result.rows,
