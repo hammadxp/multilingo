@@ -28,7 +28,7 @@ export function HistoryMenu({ items, onSelect, onDelete }: HistoryMenuProps) {
         </span>
       </DropdownMenuTrigger>
       <DropdownMenuContent
-        className="!max-h-[470px] !w-[min(370px,calc(100vw-24px))] overflow-hidden !rounded-[13px] !border !border-line !bg-[var(--popover)] !text-ink !shadow-[0_15px_34px_rgba(18,28,59,0.18)] [&_[data-slot=dropdown-menu-item]]:cursor-pointer [&_[data-slot=dropdown-menu-item]]:transition-colors [&_[data-slot=dropdown-menu-item]:not([data-disabled]):hover]:bg-hover [&_[data-slot=dropdown-menu-item]:not([data-disabled]):hover]:text-primary [&_[data-slot=dropdown-menu-label]]:font-[650]"
+        className="!max-h-[470px] !w-[min(370px,calc(100vw-24px))] overflow-hidden !rounded-[13px] !border-2 !border-line !bg-[var(--popover)] !text-ink !shadow-[0_15px_34px_rgba(18,28,59,0.18)] [&_[data-slot=dropdown-menu-item]]:cursor-pointer [&_[data-slot=dropdown-menu-item]]:transition-colors [&_[data-slot=dropdown-menu-item]:not([data-disabled]):hover]:bg-hover [&_[data-slot=dropdown-menu-item]:not([data-disabled]):hover]:text-primary [&_[data-slot=dropdown-menu-label]]:font-[650]"
         align="end"
       >
         <DropdownMenuGroup>

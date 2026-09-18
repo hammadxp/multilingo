@@ -34,7 +34,7 @@ export function LanguagePicker({
     >
       <DropdownMenuTrigger render={children} />
       <DropdownMenuContent
-        className="!h-[min(420px,var(--available-height))] !w-[290px] overflow-hidden !rounded-[13px] !border !border-line !bg-[var(--popover)] !p-0 !text-ink !shadow-[0_15px_34px_rgba(18,28,59,0.18)] max-[600px]:!w-[min(290px,calc(100vw-24px))] [&_[data-slot=dropdown-menu-item]]:cursor-pointer [&_[data-slot=dropdown-menu-item]]:transition-colors [&_[data-slot=dropdown-menu-item]:not([data-disabled]):hover]:bg-hover [&_[data-slot=dropdown-menu-item]:not([data-disabled]):hover]:text-primary"
+        className="h-[min(420px,var(--available-height))] w-[290px] overflow-hidden rounded-[13px] border border-line bg-[var(--popover)] p-0 text-ink shadow-[0_15px_34px_rgba(18,28,59,0.18)] max-[600px]:w-[min(290px,calc(100vw-24px))] [&_[data-slot=dropdown-menu-item]]:cursor-pointer [&_[data-slot=dropdown-menu-item]]:transition-colors [&_[data-slot=dropdown-menu-item]:not([data-disabled]):hover]:bg-hover [&_[data-slot=dropdown-menu-item]:not([data-disabled]):hover]:text-primary"
         align="start"
       >
         <div className="m-[9px] flex items-center gap-[9px] rounded-[9px] border border-line px-[11px] text-muted-ink">

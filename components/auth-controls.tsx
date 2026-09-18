@@ -14,10 +14,16 @@ export function AuthControls() {
       </div>
     )
   return (
-    <div className="ml-[3px] flex items-center [&_button]:flex [&_button]:items-center [&>*]:flex">
+    <div className="ml-1 flex items-center [&_button]:flex [&_button]:items-center [&>*]:flex">
       {isSignedIn ? (
         <UserButton
-          appearance={{ elements: { avatarBox: "size-[38px] rounded-[10px]" } }}
+          appearance={{
+            elements: {
+              avatarBox: "size-[38px] rounded-[10px]",
+              avatarImage: "rounded-[10px]",
+              userButtonTrigger: "rounded-[10px]",
+            },
+          }}
         />
       ) : (
         <SignInButton mode="modal">

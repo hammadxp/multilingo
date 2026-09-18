@@ -28,6 +28,9 @@ type SpeechRecognitionLike = {
   stop: () => void
 }
 
+const cleanupAbortReason = "component cleanup"
+const supersededAbortReason = "translation superseded"
+
 function readLocal<T>(key: string): T[] {
   try {
     const value: unknown = JSON.parse(localStorage.getItem(key) ?? "[]")
@@ -40,6 +43,8 @@ function readLocal<T>(key: string): T[] {
 export default function Page() {
   const spanish = languages.find((item) => item.locale === "es")!
   const [phrase, setPhrase] = useState("Hello, how are you?")
+  const phraseRef = useRef(phrase)
+  const [phraseRevision, setPhraseRevision] = useState(0)
   const [sourceLanguage, setSourceLanguage] = useState<Language>(autoLanguage)
   const [submittedPhrase, setSubmittedPhrase] = useState(phrase)
   const [selectedLanguages, setSelectedLanguages] = useState<Language[]>([
@@ -141,8 +146,8 @@ export default function Page() {
       .catch(() => undefined)
     return () => {
       active = false
-      controller.abort()
-      translationRequestRef.current?.abort()
+      controller.abort(cleanupAbortReason)
+      translationRequestRef.current?.abort(cleanupAbortReason)
       recognitionRef.current?.stop()
       if (copyTimerRef.current) clearTimeout(copyTimerRef.current)
     }
@@ -158,9 +163,11 @@ export default function Page() {
     [selectedLanguages]
   )
   function openHistory(item: HistoryItem) {
-    translationRequestRef.current?.abort()
+    translationRequestRef.current?.abort(supersededAbortReason)
     setIsLoading(false)
     setPhrase(item.phrase)
+    setPhraseRevision((revision) => revision + 1)
+    phraseRef.current = item.phrase
     setSourceLanguage(autoLanguage)
     setSubmittedPhrase(item.phrase)
     setSelectedLanguages(item.translations)
@@ -244,9 +251,9 @@ export default function Page() {
     nextLanguages = selectedLanguages,
     source = sourceLanguage
   ) {
-    const nextPhrase = phrase.trim() || submittedPhrase
+    const nextPhrase = phraseRef.current.trim() || submittedPhrase
     if (!nextPhrase || nextLanguages.length === 0) return
-    translationRequestRef.current?.abort()
+    translationRequestRef.current?.abort(supersededAbortReason)
     const controller = new AbortController()
     translationRequestRef.current = controller
     setIsLoading(true)
@@ -274,15 +281,27 @@ export default function Page() {
           )?.text ?? fallback(nextPhrase, language).text,
       }))
     } catch {
-      if (controller.signal.aborted) return
+      if (controller.signal.aborted) {
+        if (translationRequestRef.current === controller) {
+          translationRequestRef.current = null
+        }
+        return
+      }
       nextTranslations = nextLanguages.map((language) =>
         fallback(nextPhrase, language)
       )
     }
-    if (controller.signal.aborted) return
+    if (controller.signal.aborted) {
+      if (translationRequestRef.current === controller) {
+        translationRequestRef.current = null
+      }
+      return
+    }
     setTranslations(nextTranslations)
     recordHistory(nextPhrase, nextTranslations)
-    translationRequestRef.current = null
+    if (translationRequestRef.current === controller) {
+      translationRequestRef.current = null
+    }
     setIsLoading(false)
   }
   function addLanguage(language: Language) {
@@ -310,7 +329,7 @@ export default function Page() {
     if (isLoading && nextLanguages.length > 0) {
       void translate(nextLanguages)
     } else if (isLoading) {
-      translationRequestRef.current?.abort()
+      translationRequestRef.current?.abort(supersededAbortReason)
       setIsLoading(false)
     }
   }
@@ -374,12 +393,15 @@ export default function Page() {
     recognition.lang =
       sourceLanguage.locale === "auto" ? "en-US" : sourceLanguage.locale
     recognition.interimResults = true
-    recognition.onresult = (event) =>
-      setPhrase(
-        Array.from(event.results)
-          .map((result) => result[0].transcript)
-          .join("")
-      )
+    recognition.onresult = (event) => {
+      const nextPhrase = Array.from(event.results)
+        .map((result) => result[0].transcript)
+        .join("")
+      phraseRef.current = nextPhrase
+      setPhrase(nextPhrase)
+      setPhraseRevision((revision) => revision + 1)
+    }
+
     recognition.onend = () => setIsListening(false)
     recognition.start()
     recognitionRef.current = recognition
@@ -401,13 +423,16 @@ export default function Page() {
         <SourceEditor
           sourceLanguage={sourceLanguage}
           phrase={phrase}
+          phraseRevision={phraseRevision}
           isLoading={isLoading}
           isListening={isListening}
           onSourceChange={(language) => {
             setSourceLanguage(language)
             void translate(selectedLanguages, language)
           }}
-          onPhraseChange={setPhrase}
+          onPhraseChange={(value) => {
+            phraseRef.current = value
+          }}
           onTranslate={() => void translate()}
           onToggleListening={toggleListening}
         />

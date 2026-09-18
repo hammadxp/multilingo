@@ -33,7 +33,8 @@ export async function GET(request: Request) {
   const url = new URL(request.url)
   const limit = boundedInteger(url.searchParams.get("limit"), 8, 1, 50)
   const offset = boundedInteger(url.searchParams.get("offset"), 0, 0, 1_000_000)
-  await ensureDatabase()
+  if (!(await ensureDatabase()))
+    return NextResponse.json({ signedIn: true, history: [], hasMore: false })
   const [result, count] = await Promise.all([
     pool.query(
       'SELECT id, phrase, translations, created_at AS "createdAt" FROM translation_history WHERE user_id = $1 ORDER BY created_at DESC, id DESC LIMIT $2 OFFSET $3',
@@ -54,7 +55,7 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   const userId = await getUserId()
   if (!userId || !pool) return NextResponse.json({ saved: false })
-  await ensureDatabase()
+  if (!(await ensureDatabase())) return NextResponse.json({ saved: false })
   const body = await request.json().catch(() => null)
   const items = Array.isArray(body?.items) ? body.items : [body]
   let lastId: string | null = null
@@ -78,7 +79,8 @@ export async function DELETE(request: Request) {
   const id = String(body?.id ?? "")
   if (!/^\d+$/.test(id))
     return NextResponse.json({ deleted: false }, { status: 400 })
-  await ensureDatabase()
+  if (!(await ensureDatabase()))
+    return NextResponse.json({ deleted: false })
   const result = await pool.query(
     "DELETE FROM translation_history WHERE id = $1 AND user_id = $2",
     [id, userId]

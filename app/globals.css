@@ -16,6 +16,13 @@
   --color-teal-soft: var(--teal-soft);
   --color-hover: var(--hover);
   --color-peach: var(--peach);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-foreground: var(--foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--line);
+  --color-muted-foreground: var(--muted-ink);
   --animate-dot-pulse: dot-pulse 1.05s ease-in-out infinite;
   --animate-quick-spin: spin 0.8s linear infinite;
 }
@@ -61,11 +68,6 @@ html {
 body {
   margin: 0;
   font-family: var(--font-sans), "Segoe UI", sans-serif;
-}
-button,
-textarea,
-input {
-  font: inherit;
 }
 button {
   cursor: pointer;

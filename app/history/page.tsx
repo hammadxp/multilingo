@@ -5,6 +5,7 @@ import { SiteHeader } from "@/components/site-nav"
 import type { HistoryItem } from "@/lib/translation-types"
 
 const PAGE_SIZE = 12
+const cleanupAbortReason = "component cleanup"
 
 function readLocalHistory() {
   try {
@@ -62,7 +63,7 @@ export default function HistoryPage() {
       })
     return () => {
       active = false
-      controller.abort()
+      controller.abort(cleanupAbortReason)
     }
   }, [])
 
