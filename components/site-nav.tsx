@@ -99,11 +99,11 @@ function DefaultNavActions() {
           <Menu size={19} />
         </DropdownMenuTrigger>
         <DropdownMenuContent
-          className="!max-h-117.5 !w-42.5 !w-[min(370px,calc(100vw-24px))] overflow-hidden !rounded-[13px] !border !border-line !bg-popover !text-ink !shadow-[0_15px_34px_rgba(18,28,59,0.18)] [&_[data-slot=dropdown-menu-item]]:cursor-pointer [&_[data-slot=dropdown-menu-item]]:transition-colors [&_[data-slot=dropdown-menu-item]:not([data-disabled]):hover]:bg-hover [&_[data-slot=dropdown-menu-item]:not([data-disabled]):hover]:text-primary [&_[data-slot=dropdown-menu-label]]:font-[650]"
+          className="max-h-117.5 w-[min(370px,calc(100vw-24px))] overflow-hidden rounded-[13px] border border-line bg-popover text-ink shadow-[0_15px_34px_rgba(18,28,59,0.18)] **:data-[slot=dropdown-menu-item]:cursor-pointer **:data-[slot=dropdown-menu-item]:transition-colors [&_[data-slot=dropdown-menu-item]:not([data-disabled]):hover]:bg-hover [&_[data-slot=dropdown-menu-item]:not([data-disabled]):hover]:text-primary **:data-[slot=dropdown-menu-label]:font-[650]"
           align="end"
         >
           <DropdownMenuItem
-            className="cursor-pointer !gap-2.25 [&>span]:ml-auto"
+            className="cursor-pointer gap-2.25 [&>span]:ml-auto"
             onClick={() =>
               setTheme(resolvedTheme === "dark" ? "light" : "dark")
             }
@@ -118,7 +118,7 @@ function DefaultNavActions() {
               : "Dark mode"}
           </DropdownMenuItem>
           <DropdownMenuItem
-            className="cursor-pointer !gap-2.25 [&>span]:ml-auto"
+            className="cursor-pointer gap-2.25 [&>span]:ml-auto"
             render={<Link href="/saved" />}
           >
             <Star size={16} /> Saved{" "}
@@ -127,7 +127,7 @@ function DefaultNavActions() {
             </span>
           </DropdownMenuItem>
           <DropdownMenuItem
-            className="cursor-pointer !gap-2.25 [&>span]:ml-auto"
+            className="cursor-pointer gap-2.25 [&>span]:ml-auto"
             render={<Link href="/history" />}
           >
             <Clock3 size={16} /> History{" "}
@@ -135,7 +135,7 @@ function DefaultNavActions() {
               {counts.history}
             </span>
           </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer !gap-2.25 [&>span]:ml-auto">
+          <DropdownMenuItem className="cursor-pointer gap-2.25 [&>span]:ml-auto">
             <Heart size={16} /> Donate
           </DropdownMenuItem>
         </DropdownMenuContent>

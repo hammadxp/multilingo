@@ -134,7 +134,7 @@ export function TranslationCard({
               <MoreHorizontal size={20} />
             </DropdownMenuTrigger>
             <DropdownMenuContent
-              className="!min-w-46.5 !rounded-[13px] !border !border-line !bg-popover !text-ink !shadow-[0_15px_34px_rgba(18,28,59,0.18)] [&_[data-slot=dropdown-menu-item]]:cursor-pointer [&_[data-slot=dropdown-menu-item]]:rounded-lg [&_[data-slot=dropdown-menu-item]]:transition-colors [&_[data-slot=dropdown-menu-item]:not([data-disabled]):hover]:bg-hover [&_[data-slot=dropdown-menu-item]:not([data-disabled]):hover]:text-primary"
+              className="min-w-46.5 rounded-[13px] border border-line bg-popover text-ink shadow-[0_15px_34px_rgba(18,28,59,0.18)] **:data-[slot=dropdown-menu-item]:cursor-pointer **:data-[slot=dropdown-menu-item]:rounded-lg **:data-[slot=dropdown-menu-item]:transition-colors [&_[data-slot=dropdown-menu-item]:not([data-disabled]):hover]:bg-hover [&_[data-slot=dropdown-menu-item]:not([data-disabled]):hover]:text-primary"
               align="end"
             >
               <DropdownMenuItem
@@ -173,7 +173,7 @@ export function TranslationCard({
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => removeLanguage(index)}
-                className="!text-[#bd4a53] dark:!text-[#ffabb3]"
+                className="text-[#bd4a53] dark:text-[#ffabb3]"
               >
                 <Trash2 size={16} /> Remove language
               </DropdownMenuItem>
