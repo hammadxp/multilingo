@@ -7,19 +7,19 @@ export function AuthControls() {
   if (!isLoaded)
     return (
       <div
-        className="ml-[3px] flex items-center [&_button]:flex [&_button]:items-center [&>*]:flex"
+        className="ml-0.75 flex items-center *:flex [&_button]:flex [&_button]:items-center"
         aria-hidden="true"
       >
-        <span className="h-9 w-[62px] rounded-[10px] bg-hover" />
+        <span className="h-9 w-15.5 rounded-[10px] bg-hover" />
       </div>
     )
   return (
-    <div className="ml-1 flex items-center [&_button]:flex [&_button]:items-center [&>*]:flex">
+    <div className="ml-1 flex items-center *:flex [&_button]:flex [&_button]:items-center">
       {isSignedIn ? (
         <UserButton
           appearance={{
             elements: {
-              avatarBox: "size-[38px] rounded-[10px]",
+              avatarBox: "size-9.5 rounded-[10px]",
               avatarImage: "rounded-[10px]",
               userButtonTrigger: "rounded-[10px]",
             },
@@ -27,7 +27,7 @@ export function AuthControls() {
         />
       ) : (
         <SignInButton mode="modal">
-          <button className="inline-flex h-[38px] items-center justify-center gap-[7px] rounded-[10px] border border-line bg-paper px-[14px] text-[13px] font-[650] whitespace-nowrap text-ink hover:bg-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary max-[600px]:h-[34px] max-[600px]:px-2 max-[600px]:text-xs">
+          <button className="inline-flex h-9.5 items-center justify-center gap-1.75 rounded-[10px] border border-line bg-paper px-3.5 text-[13px] font-[650] whitespace-nowrap text-ink hover:bg-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary max-[600px]:h-8.5 max-[600px]:px-2 max-[600px]:text-xs">
             Sign in
           </button>
         </SignInButton>

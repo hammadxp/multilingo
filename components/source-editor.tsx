@@ -53,7 +53,7 @@ export function SourceEditor({
 
   return (
     <section className="min-w-0" aria-label="Original text">
-      <div className="mb-3 flex min-h-[39px] items-center justify-between gap-3 text-[13px] font-bold text-muted-ink [&>span]:pl-[11px]">
+      <div className="mb-3 flex min-h-9.75 items-center justify-between gap-3 text-[13px] font-bold text-muted-ink [&>span]:pl-2.75">
         <span>Translate from</span>
         <LanguagePicker
           items={[autoLanguage, ...languages]}
@@ -68,7 +68,7 @@ export function SourceEditor({
         </LanguagePicker>
       </div>
       <div
-        className={`flex min-h-[316px] flex-col rounded-2xl border border-line bg-paper px-[22px] pt-[22px] pb-[18px] transition-[border-color,box-shadow] duration-150 max-[900px]:min-h-[240px] max-[600px]:px-[17px] max-[600px]:pt-[17px] max-[600px]:pb-[10px] ${keyboardFocus ? "focus-within:border-primary focus-within:shadow-[0_0_0_3px_color-mix(in_srgb,var(--primary)_16%,transparent)]" : ""}`}
+        className={`flex min-h-79 flex-col rounded-2xl border border-line bg-paper px-5.5 pt-5.5 pb-4.5 transition-[border-color,box-shadow] duration-150 max-[900px]:min-h-60 max-[600px]:px-4.25 max-[600px]:pt-4.25 max-[600px]:pb-2.5 ${keyboardFocus ? "focus-within:border-primary focus-within:shadow-[0_0_0_3px_color-mix(in_srgb,var(--primary)_16%,transparent)]" : ""}`}
       >
         <textarea
           aria-label="Text to translate"
@@ -111,14 +111,14 @@ export function SourceEditor({
         </div>
       </div>
       <button
-        className="mt-[19px] inline-flex h-[47px] min-w-[152px] items-center justify-center gap-[9px] rounded-[11px] bg-primary px-6 text-sm font-[750] text-white hover:bg-primary-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50 dark:text-[#172042]"
+        className="mt-4.75 inline-flex h-11.75 min-w-38 items-center justify-center gap-2.25 rounded-[11px] bg-primary px-6 text-sm font-[750] text-white hover:bg-primary-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50 dark:text-[#172042]"
         onClick={() => onTranslate()}
         disabled={isLoading || !phrase.trim()}
       >
         {isLoading && <LoaderCircle className="animate-quick-spin" size={18} />}
         {isLoading ? "Translating" : "Translate"}
       </button>
-      <p className="mt-[10px] text-[11px] font-medium text-muted-ink">
+      <p className="mt-2.5 text-[11px] font-medium text-muted-ink">
         Ctrl + Enter to translate
       </p>
     </section>

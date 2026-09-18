@@ -34,13 +34,13 @@ export function LanguagePicker({
     >
       <DropdownMenuTrigger render={children} />
       <DropdownMenuContent
-        className="h-[min(420px,var(--available-height))] w-[290px] overflow-hidden rounded-[13px] border border-line bg-[var(--popover)] p-0 text-ink shadow-[0_15px_34px_rgba(18,28,59,0.18)] max-[600px]:w-[min(290px,calc(100vw-24px))] [&_[data-slot=dropdown-menu-item]]:cursor-pointer [&_[data-slot=dropdown-menu-item]]:transition-colors [&_[data-slot=dropdown-menu-item]:not([data-disabled]):hover]:bg-hover [&_[data-slot=dropdown-menu-item]:not([data-disabled]):hover]:text-primary"
+        className="h-[min(420px,var(--available-height))] w-72.5 overflow-hidden rounded-[13px] border border-line bg-popover p-0 text-ink shadow-[0_15px_34px_rgba(18,28,59,0.18)] max-[600px]:w-[min(290px,calc(100vw-24px))] [&_[data-slot=dropdown-menu-item]]:cursor-pointer [&_[data-slot=dropdown-menu-item]]:transition-colors [&_[data-slot=dropdown-menu-item]:not([data-disabled]):hover]:bg-hover [&_[data-slot=dropdown-menu-item]:not([data-disabled]):hover]:text-primary"
         align="start"
       >
-        <div className="m-[9px] flex items-center gap-[9px] rounded-[9px] border border-line px-[11px] text-muted-ink">
+        <div className="m-2.25 flex items-center gap-2.25 rounded-[9px] border border-line px-2.75 text-muted-ink">
           <Search size={15} />
           <input
-            className="h-[39px] w-full border-0 bg-transparent text-[13px] text-ink outline-none focus:outline-none"
+            className="h-9.75 w-full border-0 bg-transparent text-[13px] text-ink outline-none focus:outline-none"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             onKeyDown={(event) => event.stopPropagation()}
@@ -49,7 +49,7 @@ export function LanguagePicker({
             autoFocus
           />
         </div>
-        <div className="max-h-[350px] [scrollbar-width:thin] [scrollbar-color:var(--line)_transparent] overflow-y-auto px-1.5 pb-[7px] [&_[data-slot=dropdown-menu-item]]:rounded-lg [&_[data-slot=dropdown-menu-item]]:p-[9px] [&_[data-slot=dropdown-menu-item]]:text-[13px] [&_[data-slot=dropdown-menu-item]]:font-medium [&_p]:m-[14px] [&_p]:text-xs [&_p]:text-muted-ink">
+        <div className="max-h-87.5 [scrollbar-width:thin] [scrollbar-color:var(--line)_transparent] overflow-y-auto px-1.5 pb-1.75 [&_[data-slot=dropdown-menu-item]]:rounded-lg [&_[data-slot=dropdown-menu-item]]:p-2.25 [&_[data-slot=dropdown-menu-item]]:text-[13px] [&_[data-slot=dropdown-menu-item]]:font-medium [&_p]:m-3.5 [&_p]:text-xs [&_p]:text-muted-ink">
           {filtered.length ? (
             filtered.map((language) => (
               <DropdownMenuItem

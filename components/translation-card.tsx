@@ -67,7 +67,7 @@ export function TranslationCard({
   return (
     <Reorder.Item
       value={language}
-      className="flex min-h-[218px] flex-col rounded-[15px] border border-line bg-paper px-[19px] pt-[17px] pb-[13px] focus-within:border-[color-mix(in_srgb,var(--primary)_35%,var(--line))] hover:border-[color-mix(in_srgb,var(--primary)_35%,var(--line))] max-[600px]:px-[14px] max-[600px]:pt-[14px] max-[600px]:pb-[10px]"
+      className="flex min-h-54.5 flex-col rounded-[15px] border border-line bg-paper px-4.75 pt-4.25 pb-3.25 focus-within:border-[color-mix(in_srgb,var(--primary)_35%,var(--line))] hover:border-[color-mix(in_srgb,var(--primary)_35%,var(--line))] max-[600px]:px-3.5 max-[600px]:pt-3.5 max-[600px]:pb-2.5"
       layout="position"
       transition={{
         layout: { type: "spring", stiffness: 320, damping: 30 },
@@ -76,7 +76,7 @@ export function TranslationCard({
     >
       <div className="flex items-center gap-2 max-[600px]:gap-1">
         <button
-          className="grid h-[30px] w-[25px] flex-none cursor-grab place-items-center rounded-[7px] p-0 text-muted-ink hover:bg-hover hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary active:cursor-grabbing"
+          className="grid h-7.5 w-6.25 flex-none cursor-grab place-items-center rounded-[7px] p-0 text-muted-ink hover:bg-hover hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary active:cursor-grabbing"
           aria-label={`Reorder ${translation.name} translation`}
           title="Drag to reorder"
         >
@@ -87,14 +87,14 @@ export function TranslationCard({
           items={choices}
           onSelect={(language) => changeLanguage(index, language)}
         >
-          <button className="mr-auto inline-flex items-center gap-1.5 rounded-[9px] border border-transparent bg-transparent px-[11px] py-2 text-[13px] font-bold whitespace-nowrap text-ink hover:bg-hover hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
+          <button className="mr-auto inline-flex items-center gap-1.5 rounded-[9px] border border-transparent bg-transparent px-2.75 py-2 text-[13px] font-bold whitespace-nowrap text-ink hover:bg-hover hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
             {translation.name}
             <ChevronDown size={15} />
           </button>
         </LanguagePicker>
         <div className="ml-auto flex items-center gap-0.5">
           <button
-            className="grid size-8 place-items-center rounded-lg p-0 text-muted-ink hover:bg-hover hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary max-[600px]:size-[29px]"
+            className="grid size-8 place-items-center rounded-lg p-0 text-muted-ink hover:bg-hover hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary max-[600px]:size-7.25"
             onClick={() => void copy(translation)}
             aria-label={
               copied === translation.locale ? "Copied" : "Copy translation"
@@ -110,7 +110,7 @@ export function TranslationCard({
             )}
           </button>
           <button
-            className="grid size-8 place-items-center rounded-lg p-0 text-muted-ink hover:bg-hover hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary max-[600px]:size-[29px]"
+            className="grid size-8 place-items-center rounded-lg p-0 text-muted-ink hover:bg-hover hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary max-[600px]:size-7.25"
             onClick={() => speak(translation.text, translation.locale)}
             aria-label="Listen to translation"
             title="Listen to translation"
@@ -118,7 +118,7 @@ export function TranslationCard({
             <Volume2 size={17} />
           </button>
           <button
-            className={`grid size-8 place-items-center rounded-lg p-0 text-muted-ink hover:bg-hover hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary max-[600px]:size-[29px] ${isStarred ? "bg-hover text-primary" : ""}`}
+            className={`grid size-8 place-items-center rounded-lg p-0 text-muted-ink hover:bg-hover hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary max-[600px]:size-7.25 ${isStarred ? "bg-hover text-primary" : ""}`}
             onClick={() => toggleSaved(translation)}
             aria-label={isStarred ? "Remove from saved" : "Save translation"}
             title={isStarred ? "Remove from saved" : "Save translation"}
@@ -127,14 +127,14 @@ export function TranslationCard({
           </button>
           <DropdownMenu>
             <DropdownMenuTrigger
-              className="grid size-[34px] place-items-center rounded-[9px] p-0 text-muted-ink hover:bg-hover hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary max-[600px]:size-[29px]"
+              className="grid size-8.5 place-items-center rounded-[9px] p-0 text-muted-ink hover:bg-hover hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary max-[600px]:size-7.25"
               aria-label={`More actions for ${translation.name}`}
               title="More actions"
             >
               <MoreHorizontal size={20} />
             </DropdownMenuTrigger>
             <DropdownMenuContent
-              className="!min-w-[186px] !rounded-[13px] !border !border-line !bg-[var(--popover)] !text-ink !shadow-[0_15px_34px_rgba(18,28,59,0.18)] [&_[data-slot=dropdown-menu-item]]:cursor-pointer [&_[data-slot=dropdown-menu-item]]:rounded-lg [&_[data-slot=dropdown-menu-item]]:transition-colors [&_[data-slot=dropdown-menu-item]:not([data-disabled]):hover]:bg-hover [&_[data-slot=dropdown-menu-item]:not([data-disabled]):hover]:text-primary"
+              className="!min-w-46.5 !rounded-[13px] !border !border-line !bg-popover !text-ink !shadow-[0_15px_34px_rgba(18,28,59,0.18)] [&_[data-slot=dropdown-menu-item]]:cursor-pointer [&_[data-slot=dropdown-menu-item]]:rounded-lg [&_[data-slot=dropdown-menu-item]]:transition-colors [&_[data-slot=dropdown-menu-item]:not([data-disabled]):hover]:bg-hover [&_[data-slot=dropdown-menu-item]:not([data-disabled]):hover]:text-primary"
               align="end"
             >
               <DropdownMenuItem
@@ -182,7 +182,7 @@ export function TranslationCard({
         </div>
       </div>
       <div
-        className={`min-h-[116px] flex-none px-1 pt-[21px] pb-5 text-[clamp(16px,2vw,26px)] leading-normal font-[550] tracking-[-0.03em] wrap-anywhere text-ink ${translation.text.length > 600 ? "text-base" : translation.text.length > 250 ? "text-[19px]" : ""}`}
+        className={`min-h-29 flex-none px-1 pt-5.25 pb-5 text-[clamp(16px,2vw,26px)] leading-normal font-[550] tracking-[-0.03em] wrap-anywhere text-ink ${translation.text.length > 600 ? "text-base" : translation.text.length > 250 ? "text-[19px]" : ""}`}
         lang={translation.locale}
         dir={translation.locale === "ar" ? "rtl" : "auto"}
       >
