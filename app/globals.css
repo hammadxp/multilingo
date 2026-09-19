@@ -5,117 +5,112 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --font-sans: var(--font-sans);
-  --color-ink: var(--ink);
-  --color-muted-ink: var(--muted-ink);
-  --color-line: var(--line);
+  --animate-dot-pulse: dot-pulse 1.05s ease-in-out infinite;
+  --animate-quick-spin: spin 0.8s linear infinite;
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-background: var(--background);
+  --color-border: var(--line);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
   --color-canvas: var(--canvas);
-  --color-paper: var(--paper);
-  --color-primary: var(--primary);
-  --color-primary-hover: var(--primary-hover);
-  --color-teal-soft: var(--teal-soft);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-foreground: var(--foreground);
   --color-hover: var(--hover);
+  --color-ink: var(--ink);
+  --color-input: var(--input);
+  --color-line: var(--line);
+  --color-muted: var(--muted);
+  --color-muted-ink: var(--muted-ink);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-paper: var(--paper);
   --color-peach: var(--peach);
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-foreground: var(--foreground);
-  --color-background: var(--background);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
+  --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-primary-hover: var(--primary-hover);
+  --color-ring: var(--ring);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --color-border: var(--line);
+  --color-teal-soft: var(--teal-soft);
+  --font-sans: var(--font-sans);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  --animate-dot-pulse: dot-pulse 1.05s ease-in-out infinite;
-  --animate-quick-spin: spin 0.8s linear infinite;
 }
 
 :root {
-  --radius: 0.625rem;
-  --ink: oklch(26% 0.06 260);
-  --muted-ink: oklch(50% 0.04 260);
-  --line: oklch(91% 0.025 260);
-  --canvas: oklch(98% 0.01 260);
-  --paper: oklch(100% 0 0);
-  --primary: oklch(68.5% 0.169 237.323);
-  --primary-hover: oklch(61% 0.16 237.323);
-  --teal-soft: oklch(93% 0.05 237.323);
-  --hover: oklch(95% 0.035 237.323);
-  --peach: oklch(78% 0.12 92);
   --background: var(--canvas);
-  --foreground: var(--ink);
+  --canvas: oklch(98% 0.01 260);
   --card: var(--paper);
   --card-foreground: var(--ink);
-  --popover: var(--paper);
-  --popover-foreground: var(--ink);
-  --accent: var(--hover);
-  --accent-foreground: var(--ink);
-  --primary-foreground: oklch(100% 0 0);
-  --secondary: var(--teal-soft);
-  --secondary-foreground: var(--ink);
-  --muted: var(--teal-soft);
   --destructive: oklch(58% 0.22 27);
   --destructive-foreground: oklch(100% 0 0);
+  --accent: var(--hover);
+  --accent-foreground: var(--ink);
+  --foreground: var(--ink);
+  --hover: oklch(95% 0.035 237.323);
+  --ink: oklch(26% 0.06 260);
   --input: var(--line);
+  --line: oklch(91% 0.025 260);
+  --muted: var(--teal-soft);
+  --muted-ink: oklch(50% 0.04 260);
+  --paper: oklch(100% 0 0);
+  --peach: oklch(78% 0.12 92);
+  --popover: var(--paper);
+  --popover-foreground: var(--ink);
+  --primary: oklch(68.5% 0.169 237.323);
+  --primary-hover: oklch(61% 0.16 237.323);
+  --primary-foreground: oklch(100% 0 0);
   --ring: var(--primary);
+  --secondary: var(--teal-soft);
+  --secondary-foreground: var(--ink);
+  --teal-soft: oklch(93% 0.05 237.323);
+  --radius: 0.625rem;
   color-scheme: light;
 }
 .dark {
-  --ink: oklch(96% 0.015 260);
-  --muted-ink: oklch(78% 0.04 260);
-  --line: oklch(28% 0.025 260);
-  --canvas: oklch(12% 0.01 260);
-  --paper: oklch(18% 0.015 260);
-  --primary: oklch(68.5% 0.169 237.323);
-  --primary-hover: oklch(78% 0.14 237.323);
-  --teal-soft: oklch(34% 0.07 237.323);
-  --hover: oklch(30% 0.05 237.323);
   --background: var(--canvas);
-  --foreground: var(--ink);
+  --canvas: oklch(12% 0.01 260);
   --card: var(--paper);
   --card-foreground: var(--ink);
-  --popover: oklch(21% 0.015 260);
-  --popover-foreground: var(--ink);
-  --accent: var(--hover);
-  --accent-foreground: var(--ink);
-  --primary-foreground: oklch(100% 0 0);
-  --secondary: var(--teal-soft);
-  --secondary-foreground: var(--ink);
-  --muted: var(--teal-soft);
   --destructive: oklch(60% 0.19 25);
   --destructive-foreground: var(--ink);
+  --accent: var(--hover);
+  --accent-foreground: var(--ink);
+  --foreground: var(--ink);
+  --hover: oklch(30% 0.05 260);
+  --ink: oklch(96% 0.015 260);
   --input: var(--line);
+  --line: oklch(28% 0.025 260);
+  --muted: var(--teal-soft);
+  --muted-ink: oklch(78% 0.04 260);
+  --paper: oklch(18% 0.015 260);
+  --peach: oklch(78% 0.12 92);
+  --popover: oklch(21% 0.015 260);
+  --popover-foreground: var(--ink);
+  --primary: oklch(68.5% 0.169 237.323);
+  --primary-hover: oklch(78% 0.14 237.323);
+  --primary-foreground: oklch(100% 0 0);
   --ring: var(--primary);
+  --secondary: var(--teal-soft);
+  --secondary-foreground: var(--ink);
+  --teal-soft: oklch(34% 0.07 237.323);
   color-scheme: dark;
 }
 
 @layer base {
   * {
-    box-sizing: border-box;
-    border-color: var(--line);
+    @apply box-border border-border;
   }
-
-  html {
-    scroll-behavior: smooth;
-  }
-
   body {
-    margin: 0;
-    background: var(--background);
-    color: var(--foreground);
-    font-family: var(--font-sans), "Segoe UI", sans-serif;
+    @apply m-0 bg-background font-sans text-foreground;
+  }
+  html {
+    @apply scroll-smooth;
   }
 
   button,
@@ -125,12 +120,11 @@
   }
 
   button {
-    cursor: pointer;
+    @apply cursor-pointer;
   }
 
   button:disabled {
-    cursor: not-allowed;
-    opacity: 0.48;
+    @apply cursor-not-allowed opacity-[0.48];
   }
 }
 
@@ -139,6 +133,7 @@
     transform: rotate(360deg);
   }
 }
+
 @keyframes dot-pulse {
   0%,
   20% {

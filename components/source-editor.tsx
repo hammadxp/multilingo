@@ -118,7 +118,7 @@ export function SourceEditor({
         {isLoading && <LoaderCircle className="animate-quick-spin" size={18} />}
         {isLoading ? "Translating" : "Translate"}
       </button>
-      <p className="mt-2.5 text-[11px] font-medium text-muted-ink">
+      <p className="mt-2.5 ml-2.5 text-[11px] font-medium text-muted-ink">
         Ctrl + Enter to translate
       </p>
     </section>
