@@ -8,14 +8,14 @@ export function AuthControls() {
   if (!isLoaded)
     return (
       <div
-        className="ml-0.75 flex items-center *:flex [&_button]:flex [&_button]:items-center"
+        className="flex items-center *:flex [&_button]:flex [&_button]:items-center"
         aria-hidden="true"
       >
-        <span className="h-9 w-15.5 rounded-[10px] bg-hover" />
+        <span className="h-9.5 w-15.5 rounded-[10px] bg-hover" />
       </div>
     )
   return (
-    <div className="ml-1 flex items-center *:flex [&_button]:flex [&_button]:items-center">
+    <div className="flex items-center *:flex [&_button]:flex [&_button]:items-center">
       {isSignedIn ? (
         <UserButton
           appearance={{

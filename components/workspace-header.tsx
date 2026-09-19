@@ -47,7 +47,7 @@ export function WorkspaceHeader({
         <Button
           variant="ghost"
           size="sm"
-          className="h-9.5 rounded-[10px] px-2.75 text-[13px] font-[650] whitespace-nowrap text-ink hover:bg-hover max-[768px]:hidden"
+          className="h-9.5 rounded-[10px] px-2.75 text-[13px] font-[650] whitespace-nowrap text-ink hover:bg-hover max-[768px]:hidden [&_svg]:size-4"
           type="button"
           aria-label="Donate to Multilingo"
         >
@@ -72,7 +72,7 @@ export function WorkspaceHeader({
         <Button
           variant="outline"
           size="icon"
-          className="size-9.5 rounded-[10px] border-line text-[13px] font-[650] text-ink hover:bg-hover hover:text-ink max-[768px]:hidden"
+        className="size-9.5 rounded-[10px] border-line bg-paper text-[13px] font-[650] text-ink hover:bg-hover hover:text-ink max-[768px]:hidden"
           onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
           aria-label={
             themeReady
@@ -100,7 +100,7 @@ export function WorkspaceHeader({
         )}
         <DropdownMenu>
           <DropdownMenuTrigger
-            className="hidden size-9.5 items-center justify-center rounded-[9px] border border-line bg-paper p-0 text-ink max-[768px]:inline-flex"
+            className="hidden size-9.5 items-center justify-center rounded-[10px] border border-line bg-paper p-0 text-ink max-[768px]:inline-flex"
             aria-label="Open navigation menu"
           >
             <Menu size={19} />

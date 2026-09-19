@@ -64,7 +64,7 @@ export function SourceEditor({
           <Button
             variant="outline"
             size="sm"
-            className="h-auto rounded-lg border-line bg-paper px-3 py-2 text-xs font-bold whitespace-nowrap text-ink hover:bg-hover hover:text-ink"
+            className="rounded-lg border-line bg-paper px-3 text-xs font-bold whitespace-nowrap text-ink hover:bg-hover hover:text-ink"
             aria-label="Source language"
           >
             {sourceLanguage.name} <ChevronDown data-icon="inline-end" />
@@ -81,7 +81,7 @@ export function SourceEditor({
               ? "text-base"
               : phrase.length > 250
                 ? "text-[19px]"
-                : "text-[clamp(16px,2vw,26px)] max-[600px]:text-[21px]"
+                : "text-[clamp(20px,2.2vw,28px)] max-[600px]:text-[21px]"
           }`}
           value={phrase}
           onChange={(event) => {

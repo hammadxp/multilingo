@@ -22,7 +22,7 @@ export function LanguageFlag({ locale }: LanguageFlagProps) {
       aria-hidden="true"
     >
       <Image
-        src={`https://flagcdn.com/${flagForLocale(locale)}.svg`}
+        src={`https://flagcdn.com/${flagForLocale(locale)}.png`}
         width={24}
         height={18}
         alt=""
