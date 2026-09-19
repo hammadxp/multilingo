@@ -3,6 +3,7 @@
 import { useState, type ReactElement } from "react"
 import { Search } from "lucide-react"
 import { LanguageFlag } from "@/components/language-flag"
+import { Input } from "@/components/ui/input"
 import type { Language } from "@/lib/translation-types"
 import {
   DropdownMenu,
@@ -39,8 +40,8 @@ export function LanguagePicker({
       >
         <div className="m-2.25 flex items-center gap-2.25 rounded-[9px] border border-line px-2.75 text-muted-ink">
           <Search size={15} />
-          <input
-            className="h-9.75 w-full border-0 bg-transparent text-[13px] text-ink outline-none focus:outline-none"
+          <Input
+            className="h-9.75 rounded-none border-0 bg-transparent p-0 text-[13px] text-ink shadow-none outline-none focus-visible:ring-0"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             onKeyDown={(event) => event.stopPropagation()}

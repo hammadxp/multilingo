@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { ChevronRight, Clock3, Trash2 } from "lucide-react"
 import type { HistoryItem } from "@/lib/translation-types"
+import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -51,14 +52,16 @@ export function HistoryMenu({ items, onSelect, onDelete }: HistoryMenuProps) {
                     .join(", ")}
                 </span>
               </DropdownMenuItem>
-              <button
-                className="grid size-8.5 flex-none place-items-center rounded-lg text-muted-ink hover:bg-hover hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                className="size-8.5 flex-none rounded-lg text-muted-ink hover:bg-hover hover:text-ink"
                 onClick={() => onDelete(item)}
                 aria-label={`Delete history: ${item.phrase}`}
                 title="Delete from history"
               >
-                <Trash2 size={15} />
-              </button>
+                <Trash2 />
+              </Button>
             </div>
           ))
         ) : (

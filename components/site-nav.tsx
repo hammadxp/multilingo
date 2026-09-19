@@ -5,6 +5,7 @@ import { Clock3, Heart, Languages, Menu, Moon, Star, Sun } from "lucide-react"
 import { useEffect, useState, type ReactNode } from "react"
 import { useTheme } from "next-themes"
 import { AuthControls } from "@/components/auth-controls"
+import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -43,13 +44,15 @@ function DefaultNavActions() {
 
   return (
     <div className="flex items-center gap-2.25 max-[600px]:gap-0.5">
-      <button
-        className="inline-flex h-9.5 items-center justify-center gap-1.75 rounded-[10px] px-2.75 text-[13px] font-[650] whitespace-nowrap text-ink hover:bg-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary max-[768px]:hidden"
+      <Button
+        variant="ghost"
+        size="sm"
+        className="h-9.5 rounded-[10px] px-2.75 text-[13px] font-[650] whitespace-nowrap text-ink hover:bg-hover max-[768px]:hidden"
         type="button"
         aria-label="Donate to Multilingo"
       >
-        <Heart size={16} /> Donate
-      </button>
+        <Heart data-icon="inline-start" /> Donate
+      </Button>
       <Link
         href="/history"
         className="inline-flex h-9.5 items-center justify-center gap-1.75 rounded-[10px] px-2.75 text-[13px] font-[650] whitespace-nowrap text-ink hover:bg-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary max-[768px]:hidden max-[600px]:gap-0.75 max-[600px]:px-1.25 max-[600px]:text-[0] max-[360px]:px-0.75"
@@ -68,8 +71,10 @@ function DefaultNavActions() {
           {counts.saved}
         </span>
       </Link>
-      <button
-        className="inline-flex size-9.5 items-center justify-center gap-1.75 rounded-[10px] border border-line text-[13px] font-[650] text-ink hover:bg-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary max-[768px]:hidden"
+      <Button
+        variant="outline"
+        size="icon"
+        className="size-9.5 rounded-[10px] border-line text-[13px] font-[650] text-ink hover:bg-hover hover:text-ink max-[768px]:hidden"
         onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
         aria-label={
           themeReady
@@ -79,17 +84,21 @@ function DefaultNavActions() {
         title="Toggle color mode"
       >
         {themeReady && resolvedTheme === "dark" ? (
-          <Sun size={18} />
+          <Sun />
         ) : (
-          <Moon size={18} />
+          <Moon />
         )}
-      </button>
+      </Button>
       {process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY ? (
         <AuthControls />
       ) : (
-        <button className="inline-flex h-9.5 items-center justify-center gap-1.75 rounded-[10px] border border-line bg-paper px-3.5 text-[13px] font-[650] whitespace-nowrap text-ink hover:bg-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary max-[600px]:h-8.5 max-[600px]:px-2 max-[600px]:text-xs">
+        <Button
+          variant="outline"
+          size="sm"
+          className="h-9.5 rounded-[10px] border-line bg-paper px-3.5 text-[13px] font-[650] whitespace-nowrap text-ink hover:bg-hover hover:text-ink max-[600px]:h-8.5 max-[600px]:px-2 max-[600px]:text-xs"
+        >
           Sign in
-        </button>
+        </Button>
       )}
       <DropdownMenu>
         <DropdownMenuTrigger

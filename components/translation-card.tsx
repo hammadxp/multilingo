@@ -17,6 +17,7 @@ import {
 } from "lucide-react"
 import { LanguageFlag } from "@/components/language-flag"
 import { LanguagePicker } from "@/components/language-picker"
+import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -75,26 +76,34 @@ export function TranslationCard({
       whileDrag={{ scale: 1.01, zIndex: 1 }}
     >
       <div className="flex items-center gap-2 max-[600px]:gap-1">
-        <button
-          className="grid h-7.5 w-6.25 flex-none cursor-grab place-items-center rounded-[7px] p-0 text-muted-ink hover:bg-hover hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary active:cursor-grabbing"
+        <Button
+          variant="ghost"
+          size="icon-xs"
+          className="h-7.5 w-6.25 flex-none cursor-grab rounded-[7px] p-0 text-muted-ink hover:bg-hover hover:text-primary active:cursor-grabbing"
           aria-label={`Reorder ${translation.name} translation`}
           title="Drag to reorder"
         >
-          <GripVertical size={17} />
-        </button>
+          <GripVertical />
+        </Button>
         <LanguageFlag locale={translation.locale} />
         <LanguagePicker
           items={choices}
           onSelect={(language) => changeLanguage(index, language)}
         >
-          <button className="mr-auto inline-flex items-center gap-1.5 rounded-[9px] border border-transparent bg-transparent px-2.75 py-2 text-[13px] font-bold whitespace-nowrap text-ink hover:bg-hover hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="mr-auto h-auto rounded-[9px] border-transparent bg-transparent px-2.75 py-2 text-[13px] font-bold whitespace-nowrap text-ink hover:bg-hover hover:text-ink"
+          >
             {translation.name}
-            <ChevronDown size={15} />
-          </button>
+            <ChevronDown data-icon="inline-end" />
+          </Button>
         </LanguagePicker>
         <div className="ml-auto flex items-center gap-0.5">
-          <button
-            className="grid size-8 place-items-center rounded-lg p-0 text-muted-ink hover:bg-hover hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary max-[600px]:size-7.25"
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            className="size-8 rounded-lg p-0 text-muted-ink hover:bg-hover hover:text-primary max-[600px]:size-7.25"
             onClick={() => void copy(translation)}
             aria-label={
               copied === translation.locale ? "Copied" : "Copy translation"
@@ -104,27 +113,31 @@ export function TranslationCard({
             }
           >
             {copied === translation.locale ? (
-              <Check size={16} />
+              <Check />
             ) : (
-              <Copy size={16} />
+              <Copy />
             )}
-          </button>
-          <button
-            className="grid size-8 place-items-center rounded-lg p-0 text-muted-ink hover:bg-hover hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary max-[600px]:size-7.25"
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            className="size-8 rounded-lg p-0 text-muted-ink hover:bg-hover hover:text-primary max-[600px]:size-7.25"
             onClick={() => speak(translation.text, translation.locale)}
             aria-label="Listen to translation"
             title="Listen to translation"
           >
-            <Volume2 size={17} />
-          </button>
-          <button
-            className={`grid size-8 place-items-center rounded-lg p-0 text-muted-ink hover:bg-hover hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary max-[600px]:size-7.25 ${isStarred ? "bg-hover text-primary" : ""}`}
+            <Volume2 />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            className={`size-8 rounded-lg p-0 text-muted-ink hover:bg-hover hover:text-primary max-[600px]:size-7.25 ${isStarred ? "bg-hover text-primary" : ""}`}
             onClick={() => toggleSaved(translation)}
             aria-label={isStarred ? "Remove from saved" : "Save translation"}
             title={isStarred ? "Remove from saved" : "Save translation"}
           >
-            <Star size={16} fill={isStarred ? "currentColor" : "none"} />
-          </button>
+            <Star fill={isStarred ? "currentColor" : "none"} />
+          </Button>
           <DropdownMenu>
             <DropdownMenuTrigger
               className="grid size-8.5 place-items-center rounded-[9px] p-0 text-muted-ink hover:bg-hover hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary max-[600px]:size-7.25"

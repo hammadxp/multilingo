@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react"
 import { ChevronDown, LoaderCircle, Mic } from "lucide-react"
 import { LanguagePicker } from "@/components/language-picker"
+import { Button } from "@/components/ui/button"
+import { Textarea } from "@/components/ui/textarea"
 import { autoLanguage, languages } from "@/lib/languages"
 import type { Language } from "@/lib/translation-types"
 
@@ -59,20 +61,22 @@ export function SourceEditor({
           items={[autoLanguage, ...languages]}
           onSelect={onSourceChange}
         >
-          <button
-            className="inline-flex items-center gap-1.5 rounded-lg border border-line bg-paper px-3 py-2 text-xs font-bold whitespace-nowrap text-ink hover:bg-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-auto rounded-lg border-line bg-paper px-3 py-2 text-xs font-bold whitespace-nowrap text-ink hover:bg-hover hover:text-ink"
             aria-label="Source language"
           >
-            {sourceLanguage.name} <ChevronDown size={15} />
-          </button>
+            {sourceLanguage.name} <ChevronDown data-icon="inline-end" />
+          </Button>
         </LanguagePicker>
       </div>
       <div
         className={`flex min-h-79 flex-col rounded-2xl border border-line bg-paper px-5.5 pt-5.5 pb-4.5 transition-[border-color,box-shadow] duration-150 max-[900px]:min-h-60 max-[600px]:px-4.25 max-[600px]:pt-4.25 max-[600px]:pb-2.5 ${keyboardFocus ? "focus-within:border-primary focus-within:shadow-[0_0_0_3px_color-mix(in_srgb,var(--primary)_16%,transparent)]" : ""}`}
       >
-        <textarea
+        <Textarea
           aria-label="Text to translate"
-          className={`field-sizing-content min-h-60 w-full flex-none resize-none border-0 bg-transparent leading-normal font-medium tracking-[-0.035em] text-ink outline-none placeholder:text-muted-ink max-[900px]:min-h-42 ${
+          className={`min-h-60 w-full flex-none resize-none rounded-none border-0 bg-transparent p-0 leading-normal font-medium tracking-[-0.035em] text-ink shadow-none outline-none placeholder:text-muted-ink focus-visible:ring-0 max-[900px]:min-h-42 ${
             phrase.length > 600
               ? "text-base"
               : phrase.length > 250
@@ -99,25 +103,29 @@ export function SourceEditor({
           placeholder="Enter text"
         />
         <div className="mt-5 flex items-center justify-between text-xs font-semibold text-muted-ink">
-          <button
-            className={`grid size-9 place-items-center rounded-[9px] text-primary hover:bg-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${isListening ? "bg-hover" : ""}`}
+          <Button
+            variant="ghost"
+            size="icon"
+            className={`size-9 rounded-[9px] text-primary hover:bg-hover ${isListening ? "bg-hover" : ""}`}
             onClick={onToggleListening}
             title="Dictate text"
             aria-label="Dictate text"
           >
-            <Mic size={18} />
-          </button>
+            <Mic />
+          </Button>
           <span>{phrase.length} / 5,000</span>
         </div>
       </div>
-      <button
-        className="mt-4.75 inline-flex h-11.75 min-w-38 items-center justify-center gap-2.25 rounded-[11px] bg-primary px-6 text-sm font-[750] text-white hover:bg-primary-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50 dark:text-[#172042]"
+      <Button
+        variant="default"
+        size="lg"
+        className="mt-4.75 h-11.75 min-w-38 rounded-[11px] bg-primary px-6 text-sm font-[750] text-white hover:bg-primary-hover dark:text-[#172042]"
         onClick={() => onTranslate()}
         disabled={isLoading || !phrase.trim()}
       >
-        {isLoading && <LoaderCircle className="animate-quick-spin" size={18} />}
+        {isLoading && <LoaderCircle data-icon="inline-start" className="animate-quick-spin" />}
         {isLoading ? "Translating" : "Translate"}
-      </button>
+      </Button>
       <p className="mt-2.5 ml-2.5 text-[11px] font-medium text-muted-ink">
         Ctrl + Enter to translate
       </p>

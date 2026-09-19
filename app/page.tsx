@@ -7,6 +7,7 @@ import { LanguagePicker } from "@/components/language-picker"
 import { SourceEditor } from "@/components/source-editor"
 import { WorkspaceHeader } from "@/components/workspace-header"
 import { TranslationCard } from "@/components/translation-card"
+import { Button } from "@/components/ui/button"
 import { languages, autoLanguage, fallback } from "@/lib/languages"
 import type {
   Language,
@@ -444,12 +445,14 @@ export default function Page() {
           <div className="mb-3 flex min-h-9.75 items-center justify-between gap-3.5 text-[13px] font-bold text-muted-ink max-[360px]:flex-wrap max-[360px]:gap-2 [&>span]:pl-2.75">
             <span>Translate to</span>
             <LanguagePicker items={availableLanguages} onSelect={addLanguage}>
-              <button
-                className="inline-flex h-9.5 items-center justify-center gap-1.75 rounded-[9px] border border-line bg-paper px-3.25 text-xs font-[750] whitespace-nowrap text-ink hover:bg-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary max-[600px]:px-2.25 max-[600px]:text-[11px] max-[360px]:ml-auto"
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-9.5 rounded-[9px] border-line bg-paper px-3.25 text-xs font-[750] whitespace-nowrap text-ink hover:bg-hover hover:text-ink max-[600px]:px-2.25 max-[600px]:text-[11px] max-[360px]:ml-auto"
                 disabled={availableLanguages.length === 0}
               >
-                <Plus size={17} /> Add language
-              </button>
+                <Plus data-icon="inline-start" /> Add language
+              </Button>
             </LanguagePicker>
           </div>
           <Reorder.Group
@@ -486,15 +489,19 @@ export default function Page() {
               )
             })}
             {selectedLanguages.length === 0 && (
-              <div className="grid min-h-52.5 place-content-center justify-items-center rounded-[15px] border border-dashed border-line text-muted-ink [&_button]:inline-flex [&_button]:items-center [&_button]:gap-1.5 [&_button]:rounded-lg [&_button]:bg-teal-soft [&_button]:px-3 [&_button]:py-2 [&_button]:font-bold [&_button]:text-primary">
+              <div className="grid min-h-52.5 place-content-center justify-items-center rounded-[15px] border border-dashed border-line text-muted-ink">
                 <p>No target languages yet.</p>
                 <LanguagePicker
                   items={availableLanguages}
                   onSelect={addLanguage}
                 >
-                  <button>
-                    <Plus size={17} /> Add a language
-                  </button>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    className="rounded-lg bg-teal-soft px-3 py-2 font-bold text-primary hover:bg-teal-soft/80 hover:text-primary"
+                  >
+                    <Plus data-icon="inline-start" /> Add a language
+                  </Button>
                 </LanguagePicker>
               </div>
             )}

@@ -1,6 +1,7 @@
 "use client"
 
 import { SignInButton, UserButton, useAuth } from "@clerk/nextjs"
+import { Button } from "@/components/ui/button"
 
 export function AuthControls() {
   const { isLoaded, isSignedIn } = useAuth()
@@ -27,9 +28,13 @@ export function AuthControls() {
         />
       ) : (
         <SignInButton mode="modal">
-          <button className="inline-flex h-9.5 items-center justify-center gap-1.75 rounded-[10px] border border-line bg-paper px-3.5 text-[13px] font-[650] whitespace-nowrap text-ink hover:bg-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary max-[600px]:h-8.5 max-[600px]:px-2 max-[600px]:text-xs">
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-9.5 rounded-[10px] border-line bg-paper px-3.5 text-[13px] font-[650] whitespace-nowrap text-ink hover:bg-hover hover:text-ink max-[600px]:h-8.5 max-[600px]:px-2 max-[600px]:text-xs"
+          >
             Sign in
-          </button>
+          </Button>
         </SignInButton>
       )}
     </div>
