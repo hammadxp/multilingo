@@ -7,3 +7,6 @@ allowBuilds:
   bufferutil: true
   core-js: true
   utf-8-validate: true
+  '@prisma/engines': true
+  esbuild: true
+  prisma: true

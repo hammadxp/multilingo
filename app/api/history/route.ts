@@ -1,6 +1,7 @@
-import { NextResponse } from "next/server"
 import { auth } from "@clerk/nextjs/server"
-import { ensureDatabase, pool } from "@/lib/db"
+import { NextResponse } from "next/server"
+
+import { prisma } from "@/lib/prisma"
 
 async function getUserId() {
   try {
@@ -24,7 +25,7 @@ function boundedInteger(
 
 export async function GET(request: Request) {
   const userId = await getUserId()
-  if (!userId || !pool)
+  if (!userId)
     return NextResponse.json({
       signedIn: Boolean(userId),
       history: [],
@@ -33,57 +34,56 @@ export async function GET(request: Request) {
   const url = new URL(request.url)
   const limit = boundedInteger(url.searchParams.get("limit"), 8, 1, 50)
   const offset = boundedInteger(url.searchParams.get("offset"), 0, 0, 1_000_000)
-  if (!(await ensureDatabase()))
-    return NextResponse.json({ signedIn: true, history: [], hasMore: false })
-  const [result, count] = await Promise.all([
-    pool.query(
-      'SELECT id, phrase, translations, created_at AS "createdAt" FROM translation_history WHERE user_id = $1 ORDER BY created_at DESC, id DESC LIMIT $2 OFFSET $3',
-      [userId, limit, offset]
-    ),
-    pool.query(
-      "SELECT COUNT(*)::int AS count FROM translation_history WHERE user_id = $1",
-      [userId]
-    ),
+  const [history, count] = await Promise.all([
+    prisma.translationHistory.findMany({
+      where: { userId },
+      select: { id: true, phrase: true, translations: true, createdAt: true },
+      orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+      take: limit,
+      skip: offset,
+    }),
+    prisma.translationHistory.count({ where: { userId } }),
   ])
+
   return NextResponse.json({
     signedIn: true,
-    history: result.rows,
-    hasMore: offset + result.rows.length < count.rows[0].count,
+    history: history.map((item) => ({ ...item, id: item.id.toString() })),
+    hasMore: offset + history.length < count,
   })
 }
 
 export async function POST(request: Request) {
   const userId = await getUserId()
-  if (!userId || !pool) return NextResponse.json({ saved: false })
-  if (!(await ensureDatabase())) return NextResponse.json({ saved: false })
+  if (!userId) return NextResponse.json({ saved: false })
   const body = await request.json().catch(() => null)
   const items = Array.isArray(body?.items) ? body.items : [body]
   let lastId: string | null = null
   for (const item of items.slice(0, 8)) {
     if (typeof item?.phrase !== "string" || !Array.isArray(item?.translations))
       continue
-    const result = await pool.query(
-      "INSERT INTO translation_history (user_id, phrase, translations) VALUES ($1, $2, $3) RETURNING id",
-      [userId, item.phrase.slice(0, 1000), JSON.stringify(item.translations)]
-    )
-    lastId = String(result.rows[0].id)
+    const result = await prisma.translationHistory.create({
+      data: {
+        userId,
+        phrase: item.phrase.slice(0, 1000),
+        translations: item.translations,
+      },
+      select: { id: true },
+    })
+    lastId = result.id.toString()
   }
   return NextResponse.json({ saved: true, id: lastId })
 }
 
 export async function DELETE(request: Request) {
   const userId = await getUserId()
-  if (!userId || !pool)
-    return NextResponse.json({ deleted: false }, { status: 401 })
+  if (!userId) return NextResponse.json({ deleted: false }, { status: 401 })
   const body = await request.json().catch(() => null)
   const id = String(body?.id ?? "")
   if (!/^\d+$/.test(id))
     return NextResponse.json({ deleted: false }, { status: 400 })
-  if (!(await ensureDatabase()))
-    return NextResponse.json({ deleted: false })
-  const result = await pool.query(
-    "DELETE FROM translation_history WHERE id = $1 AND user_id = $2",
-    [id, userId]
-  )
-  return NextResponse.json({ deleted: Boolean(result.rowCount) })
+  const result = await prisma.translationHistory.deleteMany({
+    where: { id: BigInt(id), userId },
+  })
+
+  return NextResponse.json({ deleted: result.count > 0 })
 }
