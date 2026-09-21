@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { Clock3, Heart, Languages, Menu, Moon, Star, Sun } from "lucide-react"
+import { Clock3, Heart, Menu, Moon, Star, Sun } from "lucide-react"
 import { useEffect, useState, type ReactNode } from "react"
 import { useTheme } from "next-themes"
 import { AuthControls } from "@/components/auth-controls"
@@ -12,6 +12,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import Image from "next/image"
 
 function readCount(key: string) {
   try {
@@ -153,11 +154,16 @@ function SiteBrand() {
   return (
     <Link
       href="/"
-      className="inline-flex items-center gap-2.75 text-[22px] font-extrabold tracking-[-0.065em] whitespace-nowrap text-ink no-underline max-[600px]:gap-1.75 max-[600px]:text-lg max-[360px]:text-base"
+      className="flex items-center gap-2 text-2xl font-extrabold tracking-tight text-ink no-underline max-[600px]:gap-1.75 max-[600px]:text-lg max-[360px]:text-base"
     >
-      <span className="relative grid size-9.5 place-items-center rounded-[11px] bg-primary text-white after:absolute after:-top-0.75 after:-right-0.75 after:size-2.5 after:rounded-full after:border-2 after:border-paper after:bg-peach max-[600px]:size-8 max-[600px]:rounded-[9px] dark:text-[#192048] max-[600px]:[&_svg]:w-4.5">
-        <Languages size={20} strokeWidth={2.3} />
-      </span>
+      <div className="h-10 w-10">
+        <Image
+          src="/multilingo.png"
+          alt="Logo of Multilingo app"
+          width={200}
+          height={200}
+        />
+      </div>
       <span>
         multi<span className="text-primary">lingo</span>
       </span>
