@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { languages } from "@/lib/languages"
 import type { Language, Translation } from "@/lib/translation-types"
+import { getTranslationTextSize } from "@/lib/translation-text-size"
 
 type TranslationCardProps = {
   language: Language
@@ -112,11 +113,7 @@ export function TranslationCard({
               copied === translation.locale ? "Copied" : "Copy translation"
             }
           >
-            {copied === translation.locale ? (
-              <Check />
-            ) : (
-              <Copy />
-            )}
+            {copied === translation.locale ? <Check /> : <Copy />}
           </Button>
           <Button
             variant="ghost"
@@ -195,7 +192,7 @@ export function TranslationCard({
         </div>
       </div>
       <div
-        className={`min-h-29 flex-none px-1 pt-5.25 pb-5 text-[clamp(16px,2vw,26px)] leading-normal font-[550] tracking-[-0.03em] wrap-anywhere text-ink ${translation.text.length > 600 ? "text-base" : translation.text.length > 250 ? "text-[19px]" : ""}`}
+        className={`min-h-29 flex-none px-1 pt-5.25 pb-5 leading-normal font-[550] tracking-[-0.03em] wrap-anywhere text-ink ${getTranslationTextSize(translation.text.length)}`}
         lang={translation.locale}
         dir={translation.locale === "ar" ? "rtl" : "auto"}
       >

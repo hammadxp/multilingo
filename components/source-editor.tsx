@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { autoLanguage, languages } from "@/lib/languages"
 import type { Language } from "@/lib/translation-types"
+import { getTranslationTextSize } from "@/lib/translation-text-size"
 
 type SourceEditorProps = {
   sourceLanguage: Language
@@ -76,13 +77,7 @@ export function SourceEditor({
       >
         <Textarea
           aria-label="Text to translate"
-          className={`min-h-60 w-full flex-none resize-none rounded-none border-0 bg-transparent p-0 leading-normal font-medium tracking-[-0.035em] text-ink shadow-none outline-none placeholder:text-muted-ink focus-visible:ring-0 max-[900px]:min-h-42 ${
-            phrase.length > 600
-              ? "text-base"
-              : phrase.length > 250
-                ? "text-[19px]"
-                : "text-[clamp(20px,2.2vw,28px)] max-[600px]:text-[21px]"
-          }`}
+          className={`min-h-60 w-full flex-none resize-none rounded-none border-0 bg-transparent p-0 leading-normal font-medium tracking-[-0.035em] text-ink shadow-none outline-none placeholder:text-muted-ink focus-visible:ring-0 max-[900px]:min-h-42 ${getTranslationTextSize(phrase.length)}`}
           value={phrase}
           onChange={(event) => {
             setPhrase(event.target.value)
@@ -123,7 +118,12 @@ export function SourceEditor({
         onClick={() => onTranslate()}
         disabled={isLoading || !phrase.trim()}
       >
-        {isLoading && <LoaderCircle data-icon="inline-start" className="animate-quick-spin" />}
+        {isLoading && (
+          <LoaderCircle
+            data-icon="inline-start"
+            className="animate-quick-spin"
+          />
+        )}
         {isLoading ? "Translating" : "Translate"}
       </Button>
       <p className="mt-2.5 ml-2.5 text-[11px] font-medium text-muted-ink">

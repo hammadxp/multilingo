@@ -47,11 +47,11 @@ function DefaultNavActions() {
       <Button
         variant="ghost"
         size="sm"
-        className="h-9.5 rounded-[10px] px-2.75 text-[13px] font-[650] whitespace-nowrap text-ink hover:bg-hover max-[768px]:hidden [&_svg]:size-4"
+        className="h-9.5 gap-1.75 rounded-[10px] px-2.75 text-[13px] font-[650] whitespace-nowrap text-ink hover:bg-hover max-[768px]:hidden [&_svg]:size-4.25"
         type="button"
         aria-label="Donate to Multilingo"
       >
-        <Heart data-icon="inline-start" /> Donate
+        <Heart /> Donate
       </Button>
       <Link
         href="/history"
@@ -83,11 +83,7 @@ function DefaultNavActions() {
         }
         title="Toggle color mode"
       >
-        {themeReady && resolvedTheme === "dark" ? (
-          <Sun />
-        ) : (
-          <Moon />
-        )}
+        {themeReady && resolvedTheme === "dark" ? <Sun /> : <Moon />}
       </Button>
       {process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY ? (
         <AuthControls />
@@ -108,7 +104,7 @@ function DefaultNavActions() {
           <Menu size={19} />
         </DropdownMenuTrigger>
         <DropdownMenuContent
-          className="max-h-117.5 w-[min(370px,calc(100vw-24px))] overflow-hidden rounded-[13px] border border-line bg-popover text-ink shadow-[0_15px_34px_rgba(18,28,59,0.18)] **:data-[slot=dropdown-menu-item]:cursor-pointer **:data-[slot=dropdown-menu-item]:transition-colors [&_[data-slot=dropdown-menu-item]:not([data-disabled]):hover]:bg-hover [&_[data-slot=dropdown-menu-item]:not([data-disabled]):hover]:text-primary **:data-[slot=dropdown-menu-label]:font-[650]"
+          className="max-h-117.5 w-[min(370px,calc(100vw-24px))] overflow-hidden rounded-[13px] border border-line bg-popover text-ink shadow-[0_15px_34px_rgba(18,28,59,0.18)] **:data-[slot=dropdown-menu-item]:cursor-pointer **:data-[slot=dropdown-menu-item]:transition-colors **:data-[slot=dropdown-menu-label]:font-[650] [&_[data-slot=dropdown-menu-item]:not([data-disabled]):hover]:bg-hover [&_[data-slot=dropdown-menu-item]:not([data-disabled]):hover]:text-primary"
           align="end"
         >
           <DropdownMenuItem
