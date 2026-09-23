@@ -158,7 +158,7 @@ function SiteBrand() {
     >
       <div className="h-10 w-10">
         <Image
-          src="/multilingo.png"
+          src="/icon.png"
           alt="Logo of Multilingo app"
           width={200}
           height={200}
