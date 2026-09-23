@@ -1,12 +1,10 @@
-import type { WebhookEvent } from "@clerk/nextjs/server"
-import { headers } from "next/headers"
-import { NextResponse } from "next/server"
-import { Webhook } from "svix"
+import { verifyWebhook } from "@clerk/nextjs/webhooks"
+import { type NextRequest, NextResponse } from "next/server"
 
 import { upsertClerkUser } from "@/lib/clerk-user-record"
 import { prisma } from "@/lib/prisma"
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   const signingSecret = process.env.CLERK_WEBHOOK_SIGNING_SECRET
 
   if (!signingSecret) {
@@ -16,20 +14,10 @@ export async function POST(request: Request) {
     )
   }
 
-  const headerList = await headers()
-  const svixHeaders = {
-    "svix-id": headerList.get("svix-id") ?? "",
-    "svix-timestamp": headerList.get("svix-timestamp") ?? "",
-    "svix-signature": headerList.get("svix-signature") ?? "",
-  }
-
-  let event: WebhookEvent
+  let event
 
   try {
-    event = new Webhook(signingSecret).verify(
-      await request.text(),
-      svixHeaders
-    ) as unknown as WebhookEvent
+    event = await verifyWebhook(request, { signingSecret })
   } catch {
     return NextResponse.json(
       { error: "Invalid webhook signature." },
