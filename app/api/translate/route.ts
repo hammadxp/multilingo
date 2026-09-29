@@ -23,25 +23,31 @@ export async function POST(request: Request) {
     )
   const apiKey = process.env.GOOGLE_CLOUD_TRANSLATE_API_KEY
   if (!apiKey) return NextResponse.json({ translations: [] })
-  const translations = await Promise.all(
-    targetLanguages.map(async (target: string) => {
-      const response = await fetch(
-        `https://translation.googleapis.com/language/translate/v2?key=${apiKey}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            q: phrase,
-            target,
-            source: sourceLanguage,
-            format: "text",
-          }),
-        }
-      )
-      if (!response.ok) throw new Error("Google Translate request failed")
-      const data = await response.json()
-      return { locale: target, text: data.data.translations[0].translatedText }
-    })
-  )
-  return NextResponse.json({ translations })
+
+  try {
+    const translations = await Promise.all(
+      targetLanguages.map(async (target: string) => {
+        const response = await fetch(
+          `https://translation.googleapis.com/language/translate/v2?key=${apiKey}`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              q: phrase,
+              target,
+              source: sourceLanguage,
+              format: "text",
+            }),
+          }
+        )
+        if (!response.ok) throw new Error("Google Translate request failed")
+        const data = await response.json()
+        return { locale: target, text: data.data.translations[0].translatedText }
+      })
+    )
+
+    return NextResponse.json({ translations })
+  } catch {
+    throw new Error("Google Translate request failed")
+  }
 }

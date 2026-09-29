@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import { Plus } from "lucide-react"
 import { Reorder } from "framer-motion"
+import posthog from "posthog-js"
 import { LanguagePicker } from "@/components/language-picker"
 import { SourceEditor } from "@/components/source-editor"
 import { WorkspaceHeader } from "@/components/workspace-header"
@@ -164,6 +165,9 @@ export default function Page() {
     [selectedLanguages]
   )
   function openHistory(item: HistoryItem) {
+    posthog.capture("history_item_opened", {
+      target_language_count: item.translations.length,
+    })
     translationRequestRef.current?.abort(supersededAbortReason)
     setIsLoading(false)
     setPhrase(item.phrase)
@@ -215,6 +219,9 @@ export default function Page() {
       .catch(() => undefined)
   }
   function deleteHistory(item: HistoryItem) {
+    posthog.capture("history_item_deleted", {
+      target_language_count: item.translations.length,
+    })
     historyTouchedRef.current = true
     if (!/^\d+$/.test(String(item.id)))
       pendingHistoryDeletes.current.add(item.id)
@@ -254,6 +261,11 @@ export default function Page() {
   ) {
     const nextPhrase = phraseRef.current.trim() || submittedPhrase
     if (!nextPhrase || nextLanguages.length === 0) return
+    posthog.capture("translation_requested", {
+      source_locale: source.locale,
+      target_language_count: nextLanguages.length,
+      input_length: nextPhrase.length,
+    })
     translationRequestRef.current?.abort(supersededAbortReason)
     const controller = new AbortController()
     translationRequestRef.current = controller
@@ -306,12 +318,17 @@ export default function Page() {
     setIsLoading(false)
   }
   function addLanguage(language: Language) {
+    posthog.capture("target_language_added", { target_locale: language.locale })
     const next = [...selectedLanguages, language]
     setSelectedLanguages(next)
     setTranslations((items) => [...items, fallback(submittedPhrase, language)])
     void translate(next)
   }
   function changeLanguage(index: number, language: Language) {
+    posthog.capture("target_language_changed", {
+      previous_target_locale: selectedLanguages[index]?.locale,
+      target_locale: language.locale,
+    })
     const next = selectedLanguages.map((item, i) =>
       i === index ? language : item
     )
@@ -324,6 +341,9 @@ export default function Page() {
     void translate(next)
   }
   function removeLanguage(index: number) {
+    posthog.capture("target_language_removed", {
+      target_locale: selectedLanguages[index]?.locale,
+    })
     const nextLanguages = selectedLanguages.filter((_, i) => i !== index)
     setSelectedLanguages(nextLanguages)
     setTranslations((items) => items.filter((_, i) => i !== index))
@@ -344,8 +364,12 @@ export default function Page() {
   }
   function toggleSaved(translation: Translation) {
     const id = `${submittedPhrase}::${translation.locale}`
+    const isSaved = saved.some((item) => item.id === id)
+    posthog.capture(isSaved ? "translation_unsaved" : "translation_saved", {
+      target_locale: translation.locale,
+    })
     persistSaved(
-      saved.some((item) => item.id === id)
+      isSaved
         ? saved.filter((item) => item.id !== id)
         : [
             {
@@ -360,19 +384,26 @@ export default function Page() {
   }
   async function copy(translation: Translation) {
     await navigator.clipboard.writeText(translation.text)
+    posthog.capture("translation_copied", { target_locale: translation.locale })
     setCopied(translation.locale)
     if (copyTimerRef.current) clearTimeout(copyTimerRef.current)
     copyTimerRef.current = setTimeout(() => setCopied(null), 1200)
   }
   async function share(translation: Translation) {
     const text = `${submittedPhrase}\n${translation.text}`
-    if (navigator.share)
-      await navigator
-        .share({ title: `${translation.name} translation`, text })
-        .catch(() => undefined)
-    else await navigator.clipboard.writeText(text)
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: `${translation.name} translation`, text })
+      } catch {
+        return
+      }
+    } else {
+      await navigator.clipboard.writeText(text)
+    }
+    posthog.capture("translation_shared", { target_locale: translation.locale })
   }
   function speak(text: string, locale: string) {
+    posthog.capture("translation_listened", { target_locale: locale })
     speechSynthesis.cancel()
     const utterance = new SpeechSynthesisUtterance(text)
     utterance.lang = locale
@@ -405,6 +436,7 @@ export default function Page() {
 
     recognition.onend = () => setIsListening(false)
     recognition.start()
+    posthog.capture("dictation_started", { source_locale: recognition.lang })
     recognitionRef.current = recognition
     setIsListening(true)
   }

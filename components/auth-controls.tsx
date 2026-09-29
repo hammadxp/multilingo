@@ -1,10 +1,35 @@
 "use client"
 
-import { SignInButton, UserButton, useAuth } from "@clerk/nextjs"
+import { useEffect, useRef } from "react"
+import { SignInButton, UserButton, useAuth, useUser } from "@clerk/nextjs"
+import posthog from "posthog-js"
 import { Button } from "@/components/ui/button"
 
 export function AuthControls() {
   const { isLoaded, isSignedIn } = useAuth()
+  const { user } = useUser()
+  const identifiedUserId = useRef<string | null>(null)
+
+  useEffect(() => {
+    if (!isLoaded || !isSignedIn || !user) {
+      if (identifiedUserId.current) {
+        posthog.reset()
+        identifiedUserId.current = null
+      }
+      return
+    }
+
+    if (identifiedUserId.current === user.id) return
+    if (identifiedUserId.current) posthog.reset()
+
+    const personProperties: Record<string, string> = {}
+    if (user.primaryEmailAddress?.emailAddress)
+      personProperties.email = user.primaryEmailAddress.emailAddress
+    if (user.fullName) personProperties.name = user.fullName
+
+    posthog.identify(user.id, personProperties)
+    identifiedUserId.current = user.id
+  }, [isLoaded, isSignedIn, user])
   if (!isLoaded)
     return (
       <div
