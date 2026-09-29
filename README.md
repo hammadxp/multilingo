@@ -26,3 +26,9 @@ pnpm dev
 The users and translation history tables are created automatically on the first authenticated history request. The complete SQL is also available in `db/schema.sql`.
 
 Without API or Clerk keys, the interface still runs in preview mode with sample translations and browser-only history.
+
+## Production URL and search metadata
+
+The public origin is defined in `PROJECT_DETAILS.ts` as `https://multilingo.hammadxp.com/`. Multilingo uses it for canonical links, Open Graph URLs, structured data, `robots.txt`, and the sitemap. No Vercel URL variable is required.
+
+The translator homepage is the only sitemap entry. Saved translations and history have `noindex` metadata because they are personal to each visitor. Vercel preview deployments are also excluded from indexing.

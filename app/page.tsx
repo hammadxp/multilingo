@@ -411,6 +411,9 @@ export default function Page() {
 
   return (
     <main className="min-h-screen bg-canvas text-ink">
+      <h1 className="sr-only">
+        Translate text into multiple languages at once
+      </h1>
       <WorkspaceHeader
         history={history}
         saved={saved}
