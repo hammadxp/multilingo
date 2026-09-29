@@ -9,7 +9,7 @@ if (!projectToken || !host) {
     const missingVariable = !projectToken ? "NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN" : "NEXT_PUBLIC_POSTHOG_HOST";
 
     throw new Error(
-      `${missingVariable} variable required by PostHog is missing or un-configured, this causes events to be silently missed. This error stops appearing once ${missingVariable} is configured`
+      `${missingVariable} variable required by PostHog is missing or un-configured, this causes events to be silently missed. This error stops appearing once ${missingVariable} is configured`,
     );
   }
 } else {
@@ -18,5 +18,6 @@ if (!projectToken || !host) {
     defaults: "2026-05-30",
     capture_exceptions: true,
     debug: process.env.NODE_ENV === "development",
+    ui_host: "https://us.posthog.com",
   });
 }
